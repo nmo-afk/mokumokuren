@@ -69,3 +69,9 @@ body{background:var(--deep);color:var(--cream)}
 @media(max-width:390px){.brand h1{font-size:13px;letter-spacing:1px}.brand-mark{width:30px;height:30px}.primary-nav button{font-size:12px}.subnav button{padding:9px 12px}}
 .empty{min-height:340px;background:linear-gradient(180deg,transparent 15%,#08231f 75%),url('/assets/shoji-eyes.svg') center top / 100% 210px no-repeat,#08231f}
 .empty:after{display:none}
+/* v0.7: lightweight progress controls, existing visual system retained */
+.anime-progress{margin:18px 0;padding:14px;border:1px solid rgba(242,244,243,.18);border-radius:14px;touch-action:pan-y;user-select:none}
+.anime-progress .progress-track{height:5px;background:rgba(242,244,243,.15);border-radius:10px;overflow:hidden;margin:12px 0}
+.anime-progress .progress-track span{display:block;height:100%;background:#fbd242;transition:width .2s ease}
+.progress-buttons{flex-wrap:wrap;gap:8px}
+.progress-buttons button{min-height:42px}
