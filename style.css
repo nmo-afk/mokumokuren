@@ -10,3 +10,36 @@
 .shell{padding-bottom:calc(175px + env(safe-area-inset-bottom))}
 .toast{bottom:calc(145px + env(safe-area-inset-bottom))}
 @media (display-mode:standalone){.bottom{bottom:0;padding-bottom:calc(10px + env(safe-area-inset-bottom))}.shell{padding-bottom:calc(105px + env(safe-area-inset-bottom))}.toast{bottom:calc(95px + env(safe-area-inset-bottom))}}
+
+/* v0.2.2 — primary categories at the top; no bottom navigation overlay. */
+.shell{padding-bottom:calc(24px + env(safe-area-inset-bottom))}
+.top{padding-bottom:12px}
+.primary-nav{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin-top:17px}
+.primary-nav button{display:flex;align-items:center;justify-content:center;gap:8px;min-width:0;min-height:49px;padding:10px 7px;border:1px solid #493039;border-radius:14px;background:#21171b;color:#cbbfc2;font-size:12px;font-weight:600;transition:background .18s,border-color .18s,color .18s}
+.primary-nav button.active{background:linear-gradient(130deg,#b82b48,#7d1934);border-color:#d84662;color:#fff;box-shadow:0 4px 18px #9d203633}
+.primary-nav svg{width:22px;height:22px;flex-shrink:0;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.primary-nav button:focus-visible,.subnav button:focus-visible{outline:2px solid #ff8195;outline-offset:2px}
+.subnav{padding-top:12px;padding-bottom:2px}
+.subnav button{flex-shrink:0}
+.toast{bottom:calc(22px + env(safe-area-inset-bottom))}
+@media (display-mode:standalone){.shell{padding-bottom:calc(24px + env(safe-area-inset-bottom))}.toast{bottom:calc(22px + env(safe-area-inset-bottom))}}
+@media(max-width:390px){.primary-nav{gap:6px}.primary-nav button{gap:5px;font-size:11px}.primary-nav svg{width:19px;height:19px}.brand h1{font-size:17px;letter-spacing:1.4px}}
+@media(prefers-reduced-motion:reduce){.primary-nav button{transition:none}}
+
+/* v0.3: approved light-layout composition, dark-green surfaces only. */
+:root{--deep:#061d1b;--surface:#092824;--surface2:#10332e;--red:#960012;--green:#006757;--cream:#F2F4F3;--gold:#FBD242;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--deep);color:var(--cream)}
+body{background:var(--deep);color:var(--cream)}
+.shell{max-width:780px;padding-bottom:calc(34px + env(safe-area-inset-bottom))}
+.top{position:relative;top:auto;padding:calc(env(safe-area-inset-top) + 13px) 18px 12px;background:linear-gradient(180deg,#082b26 0%,#092924 80%,#071e1c 100%);border-color:#315149;backdrop-filter:none}
+.brand{min-height:120px;position:relative;align-items:flex-start;padding-top:5px;background:linear-gradient(180deg,transparent 35%,#092924 100%),url('/assets/shoji-eyes.svg') center 24px / 100% 112px no-repeat}
+.brand h1{font-family:Georgia,'Times New Roman',serif;font-size:clamp(13px,3.7vw,21px);font-weight:500;letter-spacing:clamp(1.6px,.75vw,3px);display:flex;align-items:center;gap:9px;text-shadow:0 2px 7px #000a}
+.brand-seal{display:inline-flex;align-items:center;justify-content:center;width:25px;height:34px;color:#f3e7cf;background:#960012;border:1px solid #c73a35;border-radius:3px;font-size:17px;letter-spacing:0}
+.settings-trigger{background:#082923dd;border:0;color:#FBD242;display:grid;place-items:center;padding:6px;border-radius:8px}
+.primary-nav{margin-top:0;gap:5px}.primary-nav button{flex-direction:column;gap:3px;min-height:63px;border-color:transparent;background:transparent;border-radius:9px;color:#e6e9e3;font-size:12px;font-weight:500;padding:7px 4px}.primary-nav svg{width:25px;height:25px;stroke:#e5dbb9}.primary-nav button.active{background:linear-gradient(140deg,#a80c20,#79000e);border-color:#b6363c;box-shadow:none;color:white}.primary-nav button.active svg{stroke:white}
+.subnav{padding-top:12px;gap:6px}.subnav button,.chip{background:#0a2925;border-color:#416158;color:#e3e6df;padding:8px 11px;font-size:11px}.subnav button.active,.chip.active{background:var(--red);border-color:#c33c46;color:#fff}
+.hero{margin:10px 15px 0;min-height:315px;border-radius:13px;border:1px solid #2d4e46;background:linear-gradient(135deg,#173b32,#061d1b);padding:17px;box-shadow:0 6px 18px #0003}.hero img{opacity:.78}.hero:after{background:linear-gradient(0deg,#041e1b 0%,#082b2540 60%,transparent 100%)}.hero h2{font-family:Georgia,'Times New Roman',serif;font-size:31px;font-weight:500}.eyebrow{color:#e4d8a8;font-size:10px;letter-spacing:1.6px}.hero p{color:#f1ede7}.action{background:linear-gradient(160deg,#ae0d25,#81000e);border:1px solid #c4454c;border-radius:23px;padding:10px 18px;color:white}.action.secondary{background:#17433a;border-color:#46665b}
+.content{padding:17px 19px}.section-title h3{font-size:19px;font-weight:600}.muted{color:#b2c6bd}.range{accent-color:#960012}.poster{background:#0d2d29;border:1px solid #315248}.poster img{background:#173b33}.poster .placeholder{background:linear-gradient(145deg,#16443a,#08251f)}.poster small{color:#b6c7c0}.panel{background:#0b2a25;border-color:#35564e}.panel p,.modal p{color:#d4e0d8}.search,.filters select,.settings input{background:#0c2c27;border-color:#426258;color:#f2f4f3}.modal{background:#092a25}.toast{background:#19443a;color:white}.footnote{color:#adc1b8}
+.empty{position:relative;isolation:isolate;border:1px solid #35554c;border-radius:16px;overflow:hidden;min-height:290px;display:flex;flex-direction:column;align-items:center;justify-content:end;padding:155px 20px 30px;background:linear-gradient(180deg,transparent 5%,#08231f 66%),url('/assets/shoji-eyes.svg') center top / auto 185px no-repeat,#08231f;color:#f2f4f3}.empty:after{content:'◌';position:absolute;top:142px;color:#FBD242;font-size:25px;opacity:.6}.illustrated-empty{margin-top:10px}
+/* Quiet Japanese seigaiha waves, restricted to empty-state footer only. */
+.empty:before{content:'';position:absolute;inset:auto 0 0;height:25px;background:repeating-radial-gradient(ellipse at 20px 27px,transparent 0 10px,#00675788 11px 12px,transparent 13px 22px);opacity:.28;pointer-events:none}
+@media(max-width:390px){.brand h1{font-size:14px;letter-spacing:1.5px}.primary-nav svg{width:23px;height:23px}.primary-nav button{font-size:11px}.hero{min-height:300px}}

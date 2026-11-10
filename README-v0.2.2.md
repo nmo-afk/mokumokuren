@@ -1,0 +1,1 @@
+Mokumokuren v0.2.2: Top-level Movies / TV Shows / Anime navigation with custom SVG icons, followed by existing list tabs. Removes floating bottom navigation and restores poster visibility. Replace app.js and style.css in the GitHub repository root; Netlify should redeploy automatically. No changes to credentials, API calls, or functions.
