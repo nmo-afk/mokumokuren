@@ -1,0 +1,1 @@
+Mokumokuren v0.7.2: Trakt PKCE diagnostics. Preserves anime and design from v0.7.1. No Trakt client secret. If login fails, open Settings to read persistent last login error with request/response stage and HTTP status. Do not share authorization codes or access tokens.

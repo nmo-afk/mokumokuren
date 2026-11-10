@@ -82,7 +82,7 @@ async function verifyAccounts(){
   if(state.anilist){try{const d=await ani('query{Viewer{id name}}');if(!d?.Viewer?.id)throw Error('Viewer missing');state.aniUser=d.Viewer.name}catch(e){state.aniUser=null;toast('AniList session needs reconnecting: '+e.message)}}
   if(state.trakt){try{const d=await trakt('/users/settings');state.traktUser=d?.user?.username||d?.user?.name||null;if(!state.traktUser)throw Error('Username missing')}catch(e){state.traktUser=null;toast('Trakt session needs reconnecting: '+e.message)}}
 }
-function showSettings(){let back=document.createElement('div');back.className='modal-back';back.innerHTML=`<div class="modal settings"><button class="close">×</button><h2>Settings</h2><p>Connect accounts and configure discovery. Credentials remain in your browser session.</p><div class="panel"><h3>Trakt</h3><p>${state.trakt?(state.traktUser?'Connected as '+esc(state.traktUser):'Token saved — account not verified'):'Not connected'}</p><button class="action" id="trakt-login">${state.trakt?'Reconnect':'Connect Trakt'}</button> <button class="chip" id="trakt-out">Disconnect</button></div><div class="panel"><h3>AniList</h3><p>${state.anilist?(state.aniUser?'Connected as '+esc(state.aniUser):'Token saved — account not verified'):'Not connected'}</p><button class="action" id="ani-login">${state.anilist?'Reconnect':'Connect AniList'}</button> <button class="chip" id="ani-out">Disconnect</button></div><div class="panel"><h3>Preview data</h3><p>Use fictional placeholder titles if APIs are not configured.</p><button class="chip" id="demo">${state.demo?'Disable':'Enable'} preview data</button></div><p class="footnote">TMDB requires the TMDB_READ_TOKEN Netlify environment variable. Trakt requires TRAKT_CLIENT_ID; AniList requires ANILIST_CLIENT_ID and ANILIST_CLIENT_SECRET (server-side only). OAuth redirect URLs must match this site's HTTPS address. No account passwords are requested.</p><p class="footnote">Movie/TV posters and metadata: TMDB. This product uses the TMDB API but is not endorsed or certified by TMDB. Anime data: AniList.</p></div>`;document.body.append(back);back.querySelector('.close').onclick=()=>back.remove();back.onclick=e=>{if(e.target===back)back.remove()};back.querySelector('#trakt-login').onclick=loginTrakt;back.querySelector('#ani-login').onclick=loginAni;back.querySelector('#trakt-out').onclick=()=>{sessionStorage.removeItem('trakt_token');state.trakt='';state.traktUser=null;back.remove();toast('Trakt disconnected');load()};back.querySelector('#ani-out').onclick=()=>{sessionStorage.removeItem('anilist_token');state.anilist='';state.aniUser=null;back.remove();toast('AniList disconnected');load()};back.querySelector('#demo').onclick=()=>{state.demo=!state.demo;store('demo',state.demo);back.remove();load()}}
+function showSettings(){let back=document.createElement('div');back.className='modal-back';back.innerHTML=`<div class="modal settings"><button class="close">×</button><h2>Settings</h2><p>Connect accounts and configure discovery. Credentials remain in your browser session.</p><div class="panel"><h3>Trakt</h3>${sessionStorage.getItem('last_auth_error')?`<p class="footnote" style="overflow-wrap:anywhere;color:#f3b6b6">Last login error: ${esc(sessionStorage.getItem('last_auth_error'))}</p>`:''}<p>${state.trakt?(state.traktUser?'Connected as '+esc(state.traktUser):'Token saved — account not verified'):'Not connected'}</p><button class="action" id="trakt-login">${state.trakt?'Reconnect':'Connect Trakt'}</button> <button class="chip" id="trakt-out">Disconnect</button></div><div class="panel"><h3>AniList</h3><p>${state.anilist?(state.aniUser?'Connected as '+esc(state.aniUser):'Token saved — account not verified'):'Not connected'}</p><button class="action" id="ani-login">${state.anilist?'Reconnect':'Connect AniList'}</button> <button class="chip" id="ani-out">Disconnect</button></div><div class="panel"><h3>Preview data</h3><p>Use fictional placeholder titles if APIs are not configured.</p><button class="chip" id="demo">${state.demo?'Disable':'Enable'} preview data</button></div><p class="footnote">TMDB requires the TMDB_READ_TOKEN Netlify environment variable. Trakt requires TRAKT_CLIENT_ID; AniList requires ANILIST_CLIENT_ID and ANILIST_CLIENT_SECRET (server-side only). OAuth redirect URLs must match this site's HTTPS address. No account passwords are requested.</p><p class="footnote">Movie/TV posters and metadata: TMDB. This product uses the TMDB API but is not endorsed or certified by TMDB. Anime data: AniList.</p></div>`;document.body.append(back);back.querySelector('.close').onclick=()=>back.remove();back.onclick=e=>{if(e.target===back)back.remove()};back.querySelector('#trakt-login').onclick=loginTrakt;back.querySelector('#ani-login').onclick=loginAni;back.querySelector('#trakt-out').onclick=()=>{sessionStorage.removeItem('trakt_token');state.trakt='';state.traktUser=null;back.remove();toast('Trakt disconnected');load()};back.querySelector('#ani-out').onclick=()=>{sessionStorage.removeItem('anilist_token');state.anilist='';state.aniUser=null;back.remove();toast('AniList disconnected');load()};back.querySelector('#demo').onclick=()=>{state.demo=!state.demo;store('demo',state.demo);back.remove();load()}}
 function randomString(){let b=crypto.getRandomValues(new Uint8Array(32));return Array.from(b,x=>('0'+x.toString(16)).slice(-2)).join('')}
 async function loginTrakt(){
   if(!TRAKT_ID){toast('Trakt Client ID is missing');return}
@@ -106,19 +106,43 @@ async function callback(){
   const p=new URLSearchParams(location.search),code=p.get('code'),returnedState=p.get('state');
   const traktState=sessionStorage.getItem('oauth_trakt_state'),aniState=sessionStorage.getItem('oauth_anilist_state');
   history.replaceState({},'', '/');
-  if(p.get('error')){toast('Authorization rejected: '+p.get('error'));return}
-  if(!code){toast('No authorization code returned');return}
+  if(p.get('error')){authFailure('Authorization rejected: '+p.get('error'));return}
+  if(!code){authFailure('No authorization code returned');return}
   let service='',endpoint='',body={code,redirect_uri:location.origin+'/callback'};
-  if(returnedState&&traktState&&returnedState===traktState){service='Trakt';endpoint='/api/trakt-token';body.code_verifier=sessionStorage.getItem('oauth_trakt_verifier');if(!body.code_verifier){toast('Trakt login expired. Please retry.');return}}
+  if(returnedState&&traktState&&returnedState===traktState){service='Trakt';endpoint='/api/trakt-token';body.code_verifier=sessionStorage.getItem('oauth_trakt_verifier');if(!body.code_verifier){authFailure('Trakt PKCE verifier missing; sign in again in the same Safari tab.');return}}
   else if(returnedState&&aniState&&returnedState===aniState){service='AniList';endpoint='/api/anilist-token'}
-  else {toast('Login blocked: OAuth state did not match. Retry from Settings.');return}
+  else {authFailure('OAuth state mismatch. Return to Settings and reconnect in the same Safari tab.');return}
+  let stage='request';
   try{
-    const r=await fetch(endpoint,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(body)});
-    const d=await r.json();if(!r.ok||!d.access_token)throw Error(d.error_description||d.message||d.error||'Token exchange failed');
+    let r;
+    if(service==='Trakt'){
+      // PKCE is a public-client flow. Try the browser exchange first so a
+      // Cloudflare block against Netlify's outbound IP does not affect login.
+      // If Trakt does not permit this origin via CORS, use our Netlify function.
+      const payload={...body,client_id:TRAKT_ID,grant_type:'authorization_code'};
+      try{
+        stage='browser exchange';
+        r=await fetch('https://api.trakt.tv/oauth/token',{method:'POST',mode:'cors',headers:{'content-type':'application/json','accept':'application/json'},body:JSON.stringify(payload),cache:'no-store'});
+      }catch(browserError){
+        stage='server fallback';
+        r=await fetch(new URL(endpoint,location.origin).href,{method:'POST',headers:{'content-type':'application/json','accept':'application/json'},body:JSON.stringify(body),cache:'no-store'});
+      }
+    }else{
+      r=await fetch(new URL(endpoint,location.origin).href,{method:'POST',headers:{'content-type':'application/json','accept':'application/json'},body:JSON.stringify(body),cache:'no-store'});
+    }
+    stage+=' response';
+    const raw=await r.text();let d;
+    try{d=JSON.parse(raw)}catch{throw Error('Token exchange returned HTML/non-JSON (HTTP '+r.status+', '+(r.headers.get('content-type')||'unknown type')+'). Trakt may be blocking this network request.')} 
+    if(!r.ok||!d.access_token)throw Error('HTTP '+r.status+': '+String(d.error_description||d.message||d.error||'Token exchange failed').slice(0,220));
     const key=service==='Trakt'?'trakt':'anilist';sessionStorage.setItem(key+'_token',d.access_token);state[key]=d.access_token;
-    await verifyAccounts();toast(service+' connected'+(service==='Trakt'&&state.traktUser?' as '+state.traktUser:service==='AniList'&&state.aniUser?' as '+state.aniUser:''));
-  }catch(e){toast(service+' login failed: '+e.message)}
+    sessionStorage.removeItem('last_auth_error');
+    toast(service+' token saved; verifying account…');
+    stage='verification';
+    try{await verifyAccounts()}catch(e){toast(service+' token saved, but verification failed: '+e.message)}
+    toast(service+' connected'+(service==='Trakt'&&state.traktUser?' as '+state.traktUser:service==='AniList'&&state.aniUser?' as '+state.aniUser:''));
+  }catch(e){authFailure(service+' login failed ['+stage+']: '+(e?.message||String(e)))}
   finally{if(service==='Trakt'){sessionStorage.removeItem('oauth_trakt_state');sessionStorage.removeItem('oauth_trakt_verifier')}else sessionStorage.removeItem('oauth_anilist_state')}
 }
+function authFailure(message){sessionStorage.setItem('last_auth_error',message);toast(message);}
 let sx=0;document.addEventListener('touchstart',e=>{sx=e.touches[0].clientX},{passive:true});document.addEventListener('touchend',e=>{let dx=e.changedTouches[0].clientX-sx;if(Math.abs(dx)>100&&!document.querySelector('.modal-back')&& !e.target.closest('.anime-progress')){let i=tabs.indexOf(state.tab),n=i+(dx<0?1:-1);if(n>=0&&n<tabs.length){state.tab=tabs[n];layout();load()}}},{passive:true});
 await callback();layout();await verifyAccounts();load();
