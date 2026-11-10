@@ -14,6 +14,9 @@ export default async request => {
       body:JSON.stringify({code:body.code,client_id:client,code_verifier:body.code_verifier,
         redirect_uri:body.redirect_uri,grant_type:'authorization_code'})
     });
-    return new Response(await r.text(),{status:r.status,headers:{'content-type':'application/json','cache-control':'no-store'}});
+    const raw=await r.text();
+    const type=r.headers.get('content-type')||'';
+    if(!type.includes('json'))return Response.json({error:'trakt_upstream_blocked',message:'Trakt returned a non-JSON response (possibly a Cloudflare block)',upstream_status:r.status},{status:502,headers:{'cache-control':'no-store'}});
+    return new Response(raw,{status:r.status,headers:{'content-type':'application/json','cache-control':'no-store'}});
   }catch{return Response.json({error:'Trakt token service unavailable'},{status:502})}
 };
