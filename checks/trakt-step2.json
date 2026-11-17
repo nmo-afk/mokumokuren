@@ -1,0 +1,23 @@
+{
+  "date": "2026-11-17",
+  "step": 2,
+  "status": "in_progress",
+  "completed_release_steps": 1,
+  "estimated_remaining_release_steps": 4,
+  "observations": {
+    "candidate_restored_and_sha256_verified": true,
+    "browser_trakt_connection": "disconnected",
+    "existing_deployed_interface": "earlier_than_current_candidate",
+    "local_trakt_test_token_available": false,
+    "authenticated_live_requests": 0
+  },
+  "verified_source_fixes": [
+    "One title-page Watchlist write remains active during repeated presses and concurrent status refresh.",
+    "Quick episode tracking requires a positive integer added count and a matched show, season and episode.",
+    "Invalid episode positions are rejected before a request."
+  ],
+  "core_checks_passed": 38,
+  "core_checks_total": 38,
+  "runtime_files_verified": 97,
+  "live_read_write_readback": "pending_authenticated_candidate"
+}

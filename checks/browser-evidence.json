@@ -1,0 +1,546 @@
+{
+  "date": "2026-11-17",
+  "providerMode": "Mocked, no live account requests",
+  "desktopPages": 15,
+  "phonePages": 30,
+  "evidence": [
+    {
+      "view": "Desktop Watchlist",
+      "firstPosterTop": 127,
+      "headingHeight": 40,
+      "scrollWidth": 1440,
+      "width": 1440
+    },
+    {
+      "view": "Watchlist sort, search, list toggles",
+      "pass": true
+    },
+    {
+      "view": "Phone Watchlist",
+      "firstPosterTop": 216,
+      "headingHeight": 94,
+      "scrollWidth": 375,
+      "toolbarWidth": 345,
+      "width": 375
+    },
+    {
+      "view": "Phone custom date",
+      "picked": "2020-06-03T22:00",
+      "centeredGaps": true,
+      "equalActionWidths": true
+    },
+    {
+      "view": "Selected date save",
+      "payload": {
+        "data": {
+          "shows": [
+            {
+              "ids": {
+                "trakt": 201
+              },
+              "watched_at": "2020-06-03T21:00:00.000Z"
+            }
+          ]
+        },
+        "path": "/sync/history"
+      }
+    },
+    {
+      "view": "Dated episode track",
+      "payload": {
+        "data": {
+          "episodes": [
+            {
+              "ids": {
+                "trakt": 901
+              },
+              "watched_at": "released"
+            }
+          ]
+        },
+        "path": "/sync/history"
+      }
+    },
+    {
+      "view": "Narrow phone",
+      "overflow": false,
+      "railAspect": "16 / 9",
+      "railSize": {
+        "bottom": 137.5,
+        "height": 140.390625,
+        "left": 16,
+        "right": 265.59375,
+        "top": -2.890625,
+        "width": 249.59375,
+        "x": 16,
+        "y": -2.890625
+      },
+      "scrollWidth": 305,
+      "width": 305,
+      "episodeTogglePass": true
+    },
+    {
+      "view": "Tablet AniList Watchlist, progress, discovery",
+      "progressCount": 4,
+      "pass": true
+    },
+    {
+      "view": "Desktop main pages",
+      "checks": [
+        {
+          "media": "Movies",
+          "label": "Discover",
+          "images": 0,
+          "scrollWidth": 1425,
+          "view": "discover",
+          "width": 1425
+        },
+        {
+          "media": "Movies",
+          "label": "Watchlist",
+          "images": 0,
+          "scrollWidth": 1440,
+          "view": "watchlist",
+          "width": 1440
+        },
+        {
+          "media": "Movies",
+          "label": "Watched",
+          "images": 0,
+          "scrollWidth": 1440,
+          "view": "watched",
+          "width": 1440
+        },
+        {
+          "media": "Movies",
+          "label": "Continue Watching",
+          "images": 0,
+          "scrollWidth": 1440,
+          "view": "in-progress",
+          "width": 1440
+        },
+        {
+          "media": "Movies",
+          "label": "Home",
+          "images": 0,
+          "scrollWidth": 1425,
+          "view": "recommended",
+          "width": 1425
+        },
+        {
+          "media": "TV Shows",
+          "label": "Discover",
+          "images": 0,
+          "scrollWidth": 1425,
+          "view": "discover",
+          "width": 1425
+        },
+        {
+          "media": "TV Shows",
+          "label": "Watchlist",
+          "images": 0,
+          "scrollWidth": 1440,
+          "view": "watchlist",
+          "width": 1440
+        },
+        {
+          "media": "TV Shows",
+          "label": "Discover",
+          "brokenImages": 0,
+          "scrollWidth": 1425,
+          "view": "discover",
+          "width": 1425
+        },
+        {
+          "media": "TV Shows",
+          "label": "Watchlist",
+          "brokenImages": 0,
+          "scrollWidth": 1440,
+          "view": "watchlist",
+          "width": 1440
+        },
+        {
+          "media": "TV Shows",
+          "label": "Completed",
+          "brokenImages": 0,
+          "scrollWidth": 1440,
+          "view": "watched",
+          "width": 1440
+        },
+        {
+          "media": "TV Shows",
+          "label": "Continue Watching",
+          "brokenImages": 0,
+          "scrollWidth": 1440,
+          "view": "in-progress",
+          "width": 1440
+        },
+        {
+          "media": "TV Shows",
+          "label": "Home",
+          "brokenImages": 0,
+          "scrollWidth": 1425,
+          "view": "recommended",
+          "width": 1425
+        },
+        {
+          "media": "Anime",
+          "label": "Discover",
+          "brokenImages": 0,
+          "scrollWidth": 1440,
+          "view": "discover",
+          "width": 1440
+        },
+        {
+          "media": "Anime",
+          "label": "Watchlist",
+          "brokenImages": 0,
+          "scrollWidth": 1440,
+          "view": "watchlist",
+          "width": 1440
+        },
+        {
+          "media": "Anime",
+          "label": "Completed",
+          "brokenImages": 0,
+          "scrollWidth": 1440,
+          "view": "watched",
+          "width": 1440
+        },
+        {
+          "media": "Anime",
+          "label": "Continue Watching",
+          "brokenImages": 0,
+          "scrollWidth": 1440,
+          "view": "in-progress",
+          "width": 1440
+        },
+        {
+          "media": "Anime",
+          "label": "Home",
+          "brokenImages": 0,
+          "scrollWidth": 1425,
+          "view": "recommended",
+          "width": 1425
+        }
+      ]
+    },
+    {
+      "view": "Phone main pages",
+      "checks": [
+        {
+          "frameWidth": 320,
+          "media": "Movies",
+          "label": "Home",
+          "scrollWidth": 305,
+          "topNav": 47,
+          "view": "recommended",
+          "width": 305
+        },
+        {
+          "frameWidth": 320,
+          "media": "Movies",
+          "label": "In Progress",
+          "scrollWidth": 320,
+          "topNav": 47,
+          "view": "in-progress",
+          "width": 320
+        },
+        {
+          "frameWidth": 320,
+          "media": "Movies",
+          "label": "Watchlist",
+          "scrollWidth": 305,
+          "topNav": 47,
+          "view": "watchlist",
+          "width": 305
+        },
+        {
+          "frameWidth": 320,
+          "media": "Movies",
+          "label": "Watched",
+          "scrollWidth": 320,
+          "topNav": 47,
+          "view": "watched",
+          "width": 320
+        },
+        {
+          "frameWidth": 320,
+          "media": "Movies",
+          "label": "Discover",
+          "scrollWidth": 305,
+          "topNav": 47,
+          "view": "discover",
+          "width": 305
+        },
+        {
+          "frameWidth": 320,
+          "media": "TV Shows",
+          "label": "Home",
+          "scrollWidth": 305,
+          "topNav": 47,
+          "view": "recommended",
+          "width": 305
+        },
+        {
+          "frameWidth": 320,
+          "media": "TV Shows",
+          "label": "In Progress",
+          "scrollWidth": 305,
+          "topNav": 47,
+          "view": "in-progress",
+          "width": 305
+        },
+        {
+          "frameWidth": 320,
+          "media": "TV Shows",
+          "label": "Watchlist",
+          "scrollWidth": 320,
+          "topNav": 47,
+          "view": "watchlist",
+          "width": 320
+        },
+        {
+          "frameWidth": 320,
+          "media": "TV Shows",
+          "label": "Watched",
+          "scrollWidth": 320,
+          "topNav": 47,
+          "view": "watched",
+          "width": 320
+        },
+        {
+          "frameWidth": 320,
+          "media": "TV Shows",
+          "label": "Discover",
+          "scrollWidth": 305,
+          "topNav": 47,
+          "view": "discover",
+          "width": 305
+        },
+        {
+          "frameWidth": 320,
+          "media": "Anime",
+          "label": "Home",
+          "scrollWidth": 305,
+          "topNav": 47,
+          "view": "recommended",
+          "width": 305
+        },
+        {
+          "frameWidth": 320,
+          "media": "Anime",
+          "label": "In Progress",
+          "scrollWidth": 305,
+          "topNav": 47,
+          "view": "in-progress",
+          "width": 305
+        },
+        {
+          "frameWidth": 320,
+          "media": "Anime",
+          "label": "Watchlist",
+          "scrollWidth": 320,
+          "topNav": 47,
+          "view": "watchlist",
+          "width": 320
+        },
+        {
+          "frameWidth": 320,
+          "media": "Anime",
+          "label": "Watched",
+          "scrollWidth": 320,
+          "topNav": 47,
+          "view": "watched",
+          "width": 320
+        },
+        {
+          "frameWidth": 320,
+          "media": "Anime",
+          "label": "Discover",
+          "scrollWidth": 305,
+          "topNav": 47,
+          "view": "discover",
+          "width": 305
+        },
+        {
+          "frameWidth": 390,
+          "media": "Movies",
+          "label": "Home",
+          "scrollWidth": 375,
+          "topNav": 47,
+          "view": "recommended",
+          "width": 375
+        },
+        {
+          "frameWidth": 390,
+          "media": "Movies",
+          "label": "In Progress",
+          "scrollWidth": 375,
+          "topNav": 47,
+          "view": "in-progress",
+          "width": 375
+        },
+        {
+          "frameWidth": 390,
+          "media": "Movies",
+          "label": "Watchlist",
+          "scrollWidth": 375,
+          "topNav": 47,
+          "view": "watchlist",
+          "width": 375
+        },
+        {
+          "frameWidth": 390,
+          "media": "Movies",
+          "label": "Watched",
+          "scrollWidth": 375,
+          "topNav": 47,
+          "view": "watched",
+          "width": 375
+        },
+        {
+          "frameWidth": 390,
+          "media": "Movies",
+          "label": "Discover",
+          "scrollWidth": 375,
+          "topNav": 47,
+          "view": "discover",
+          "width": 375
+        },
+        {
+          "frameWidth": 390,
+          "media": "TV Shows",
+          "label": "Home",
+          "scrollWidth": 375,
+          "topNav": 47,
+          "view": "recommended",
+          "width": 375
+        },
+        {
+          "frameWidth": 390,
+          "media": "TV Shows",
+          "label": "In Progress",
+          "scrollWidth": 375,
+          "topNav": 47,
+          "view": "in-progress",
+          "width": 375
+        },
+        {
+          "frameWidth": 390,
+          "media": "TV Shows",
+          "label": "Watchlist",
+          "scrollWidth": 375,
+          "topNav": 47,
+          "view": "watchlist",
+          "width": 375
+        },
+        {
+          "frameWidth": 390,
+          "media": "TV Shows",
+          "label": "Watched",
+          "scrollWidth": 375,
+          "topNav": 47,
+          "view": "watched",
+          "width": 375
+        },
+        {
+          "frameWidth": 390,
+          "media": "TV Shows",
+          "label": "Discover",
+          "scrollWidth": 375,
+          "topNav": 47,
+          "view": "discover",
+          "width": 375
+        },
+        {
+          "frameWidth": 390,
+          "media": "Anime",
+          "label": "Home",
+          "scrollWidth": 375,
+          "topNav": 47,
+          "view": "recommended",
+          "width": 375
+        },
+        {
+          "frameWidth": 390,
+          "media": "Anime",
+          "label": "In Progress",
+          "scrollWidth": 375,
+          "topNav": 47,
+          "view": "in-progress",
+          "width": 375
+        },
+        {
+          "frameWidth": 390,
+          "media": "Anime",
+          "label": "Watchlist",
+          "scrollWidth": 390,
+          "topNav": 47,
+          "view": "watchlist",
+          "width": 390
+        },
+        {
+          "frameWidth": 390,
+          "media": "Anime",
+          "label": "Watched",
+          "scrollWidth": 375,
+          "topNav": 47,
+          "view": "watched",
+          "width": 375
+        },
+        {
+          "frameWidth": 390,
+          "media": "Anime",
+          "label": "Discover",
+          "scrollWidth": 375,
+          "topNav": 47,
+          "view": "discover",
+          "width": 375
+        }
+      ]
+    },
+    {
+      "view": "Phone Movie and Anime details",
+      "checks": [
+        {
+          "section": "Movies",
+          "media": "Movie",
+          "posterWidth": 253.5,
+          "scrollWidth": 366,
+          "tabCount": 3,
+          "width": 365
+        },
+        {
+          "section": "Anime",
+          "media": "ANILIST · ANIME",
+          "posterWidth": 253.5,
+          "scrollWidth": 365,
+          "tabCount": 4,
+          "width": 365
+        }
+      ]
+    },
+    {
+      "view": "Sort keyboard Escape and focus restoration",
+      "pass": true
+    },
+    {
+      "view": "Phone final picker geometry",
+      "actions": [
+        {
+          "disabled": false,
+          "height": 44,
+          "width": 164.5
+        },
+        {
+          "disabled": false,
+          "height": 44,
+          "width": 164.5
+        }
+      ],
+      "date": "2020-06-03T22:00",
+      "width": 375
+    }
+  ]
+}

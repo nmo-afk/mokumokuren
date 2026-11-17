@@ -1,0 +1,490 @@
+{
+  "release": "v1.0.0-candidate",
+  "files": [
+    {
+      "path": "index.html",
+      "size": 849,
+      "sha256": "4d3b7c8dca5885fcf80a5630cf9d4dde644e483e5c1cd8f54bfb1e42c8cdffed"
+    },
+    {
+      "path": "app.js",
+      "size": 211516,
+      "sha256": "8de7d575bf72b6b97d7f435ab9569d064d4384882482a58da1342803542d5359"
+    },
+    {
+      "path": "style.css",
+      "size": 61197,
+      "sha256": "df33a8fe0bbde7c225e74448dfc4d43c0eb51af567e726b09bed22b0e5d81f32"
+    },
+    {
+      "path": "service-worker.js",
+      "size": 5831,
+      "sha256": "bf6ddc6b630ff70e3bdd625192aec619a0e970159d495e7830dae4f7e4281914"
+    },
+    {
+      "path": "manifest.webmanifest",
+      "size": 378,
+      "sha256": "71f78840d0da5105290106391571e5b267cd4526da6d024c71f0f372baa4ed41"
+    },
+    {
+      "path": "trakt-rebuild.css",
+      "size": 148148,
+      "sha256": "0fcf9e338b6e385426cf0a67590b2a126a7a56f778e28455e7c3433fa60f5a00"
+    },
+    {
+      "path": "ARCTIC-FUSE-LICENSE.txt",
+      "size": 927,
+      "sha256": "46ed0154b59d158704df668ab589a00bb6c927131dce1b691c184fe4b0bf920f"
+    },
+    {
+      "path": "assets/icon-512.png",
+      "size": 436109,
+      "sha256": "64766829a866a6e7393abb5ab19ee6ebd7e10bc6bde486e8f3878cac7d223362"
+    },
+    {
+      "path": "assets/favicon-32.png",
+      "size": 2798,
+      "sha256": "fa416f8c04474fdb06f53ed6a221499d7c24af7c790fe400453dc723232dd728"
+    },
+    {
+      "path": "assets/favicon-180.png",
+      "size": 62489,
+      "sha256": "944af6f46cb0d38d109731c6916ef13667673a4a063de466ebc18941494c70a7"
+    },
+    {
+      "path": "assets/icon.svg",
+      "size": 366,
+      "sha256": "d9e6e809d16b01cb88be8829c12566ffc4b2919aed732d027fb2c6fdc50141ff"
+    },
+    {
+      "path": "assets/shoji-eyes.svg",
+      "size": 1355,
+      "sha256": "d457ce33d5f189d2466b41d24fe05009a356b1724237af5e6753e01dff6c3581"
+    },
+    {
+      "path": "assets/trakt-icons.svg",
+      "size": 21713,
+      "sha256": "9efe0f264b0b6f9f98b2513614ed7faeb79b66fad93bac2b3de121e32dba3cec"
+    },
+    {
+      "path": "assets/arctic-icons/arrow-trend-up.png",
+      "size": 4815,
+      "sha256": "d514bfd65ce0111d1838ce27d0e7ad4deb975b194280689ac667931e6cbfaae5"
+    },
+    {
+      "path": "assets/arctic-icons/bars-progress.png",
+      "size": 3394,
+      "sha256": "427a1097bca34fb3e7a8f2ae62b5cd104ef86f7702140630071abcf9f15f47da"
+    },
+    {
+      "path": "assets/arctic-icons/bookmark.png",
+      "size": 618,
+      "sha256": "3d6d7256ed7a259f847d6efeb3e41ac9ce0207d20e29394809f82e1f46e2d7a5"
+    },
+    {
+      "path": "assets/arctic-icons/bookmarks.png",
+      "size": 807,
+      "sha256": "9ec14e436d3ab95fb0a50147f26862b2653e42907fc0e5ed8c484b0882ff26ba"
+    },
+    {
+      "path": "assets/arctic-icons/calendar.png",
+      "size": 3578,
+      "sha256": "c804d9d637c4d2b3c49b0e577ec5938cece2f4ff7ad64d87e16cde2fdb9976ab"
+    },
+    {
+      "path": "assets/arctic-icons/check.png",
+      "size": 3963,
+      "sha256": "6c4ac8b66c23b19023d6d6c428ebf8a200d3a3fa7de2bd9029248baec7488ebb"
+    },
+    {
+      "path": "assets/arctic-icons/chevron-right.png",
+      "size": 3638,
+      "sha256": "eaa5bb4d0379231561aeb8c69788e7ca7c26ce02ca3eb1f873cfb772d1b40146"
+    },
+    {
+      "path": "assets/arctic-icons/circle-check.png",
+      "size": 5907,
+      "sha256": "183e4d7758e4da3b007481b71b6aa4aaf0d3ef7cd9e65da83a80b6de9a47f257"
+    },
+    {
+      "path": "assets/arctic-icons/circle-info.png",
+      "size": 5881,
+      "sha256": "089e14785dca83ace79bcc47aa111c9bdf4e3767725d1c556a431a636039a084"
+    },
+    {
+      "path": "assets/arctic-icons/circle-play.png",
+      "size": 5985,
+      "sha256": "812a186fdc9a138fbf70dc98ee07defaad9b36a2031b7d2f0bb8d86a05c919a3"
+    },
+    {
+      "path": "assets/arctic-icons/clock.png",
+      "size": 5714,
+      "sha256": "06701e1749a867265cd508e7ac7fb2fbe02de7fef8bef58e543baa3abcca44ed"
+    },
+    {
+      "path": "assets/arctic-icons/compass.png",
+      "size": 1987,
+      "sha256": "c5ba1dd80bac9833e31e89dcd3e112a226c53e7e3c23e3824587647ab3b2faec"
+    },
+    {
+      "path": "assets/arctic-icons/eye.png",
+      "size": 9668,
+      "sha256": "bcfbd69ccb1ab0f7f80814cd050c63ec8230af567e14143aac7284cb1c4117da"
+    },
+    {
+      "path": "assets/arctic-icons/film.png",
+      "size": 5578,
+      "sha256": "5d42be1d0930f9833a00f9c98c97c83e0e7ded408485e88f7fb1b3ff4c01b215"
+    },
+    {
+      "path": "assets/arctic-icons/filter.png",
+      "size": 4538,
+      "sha256": "6b11f27acc5954daf6ebe8db229172dbd908d52b3fb1f53c71c9fff14db67253"
+    },
+    {
+      "path": "assets/arctic-icons/grid.png",
+      "size": 4726,
+      "sha256": "c81b3df5df3336179c45e550c9a39308402f642c0147f9e5f7c5cc776c6a7400"
+    },
+    {
+      "path": "assets/arctic-icons/heart.png",
+      "size": 4996,
+      "sha256": "8bf0ec73ba7f57fcaf16a8595c8fcd33ebc2b7783d5f31da1cb246f617c13371"
+    },
+    {
+      "path": "assets/arctic-icons/home.png",
+      "size": 635,
+      "sha256": "9220587e4463158a259d7ed268baaab34f5a90e77a74418e2518f1d39407d8ca"
+    },
+    {
+      "path": "assets/arctic-icons/info.png",
+      "size": 1732,
+      "sha256": "4dc3edad367fc2efb8333b205ffd26031c068af9aa46fc6a760e400df08f1103"
+    },
+    {
+      "path": "assets/arctic-icons/list-check.png",
+      "size": 6451,
+      "sha256": "d7efb759609bd4eef17f99a3b448e43e824b1f6ef6b8e4d17c91d2111bb69b2e"
+    },
+    {
+      "path": "assets/arctic-icons/list.png",
+      "size": 4326,
+      "sha256": "86ada9639f26f2dcf3d210bdd40c5227e0ae44f72bf00e1fa9e2d8914e3dcd27"
+    },
+    {
+      "path": "assets/arctic-icons/mask.png",
+      "size": 6169,
+      "sha256": "87adc22636f5a8ad08fe9119ea5bbb41080b4c1b0b07f98d912cfec201a8cf34"
+    },
+    {
+      "path": "assets/arctic-icons/minus.png",
+      "size": 2225,
+      "sha256": "7f0db34da2d369ed177655277e3898325a00146b7ca93504a6d24af1fd233b63"
+    },
+    {
+      "path": "assets/arctic-icons/person.png",
+      "size": 4907,
+      "sha256": "a276c15d6eb25772032cce6f27698e92706264b592b8ee34ef8846dabbda91bd"
+    },
+    {
+      "path": "assets/arctic-icons/play.png",
+      "size": 6008,
+      "sha256": "41401e58d300e5718818cca9ff1cf535468837025536182ba4b087c9e7297679"
+    },
+    {
+      "path": "assets/arctic-icons/play2.png",
+      "size": 6933,
+      "sha256": "19cb7935eb030fe5a96ddf184d3f7738ba905ea0fb59b54a6f9cac5ba7e0a4b3"
+    },
+    {
+      "path": "assets/arctic-icons/plus.png",
+      "size": 3296,
+      "sha256": "ba6af99549c4aaa2dd1af8d97413126ea853f0dbd97577778ff44abf7b01c419"
+    },
+    {
+      "path": "assets/arctic-icons/search.png",
+      "size": 7101,
+      "sha256": "0abb33a66237ee5df8ee2e9f76d1e8400729bd4b79651dcb21cf007d68ac27c6"
+    },
+    {
+      "path": "assets/arctic-icons/settings-basic.png",
+      "size": 7932,
+      "sha256": "81f3f1e272d4b823cfe3e84f2909234146bd478d878d51c70ac5bca92f4ade2e"
+    },
+    {
+      "path": "assets/arctic-icons/settings.png",
+      "size": 928,
+      "sha256": "c9e2286cec8f6650685097d92cf55a5425bd8cd11fa85563ea0c683f0e897aea"
+    },
+    {
+      "path": "assets/arctic-icons/shuffle.png",
+      "size": 7487,
+      "sha256": "b887a2c46aa6943837738324261fc5a6a0778d04c3fa0506272573e8950e0ce8"
+    },
+    {
+      "path": "assets/arctic-icons/sidemenu.png",
+      "size": 1497,
+      "sha256": "6b080fc820c629a8f627cfbe6be1af214274e3320bdc20459944f91b349c86e1"
+    },
+    {
+      "path": "assets/arctic-icons/sliders.png",
+      "size": 5840,
+      "sha256": "fe6b4482754db8184c09cdd5bbbd26139821ecdf53e593e87bd1ebe30e90ab1f"
+    },
+    {
+      "path": "assets/arctic-icons/star.png",
+      "size": 5062,
+      "sha256": "691e5b91f0742441970bf2c94933fe1e66de165a77d5e02d5e044a6d0482d44e"
+    },
+    {
+      "path": "assets/arctic-icons/tv.png",
+      "size": 1101,
+      "sha256": "7a988db5fbd94c3d15f89cb0b342b764958e2fd656d80826923368c14a72ed9d"
+    },
+    {
+      "path": "assets/arctic-icons/tvguide.png",
+      "size": 65838,
+      "sha256": "d7b5e0b607bd8d8c0b559c1e93a7cdb312e9333568aa93fe7e48f5e07486bb01"
+    },
+    {
+      "path": "assets/arctic-icons/user.png",
+      "size": 4745,
+      "sha256": "e31d331db9957a751e183280a7069f62d61361c58c9707724a7150f3b889b082"
+    },
+    {
+      "path": "assets/arctic-icons/view-list.png",
+      "size": 4969,
+      "sha256": "0461db7000a62facb98d5364070e0524c6f8843731604837e044545da57f0695"
+    },
+    {
+      "path": "assets/arctic-icons/watched-hide.png",
+      "size": 8313,
+      "sha256": "2e09054a6ec3d66fc6f095e90ebace2a9748dff26623a8e53fe50d8af2786195"
+    },
+    {
+      "path": "assets/arctic-icons/watched-show.png",
+      "size": 7449,
+      "sha256": "6074faf7d10a6abfa2f822bfa98e56427d6082bb98c5e723f861f639263fad61"
+    },
+    {
+      "path": "assets/arctic-icons/watchlist.png",
+      "size": 6894,
+      "sha256": "85d90801efe78fe0549ba3230f2db96664b2e6ab8578071be49531f30d6edf6f"
+    },
+    {
+      "path": "assets/arctic-icons/xmark.png",
+      "size": 4439,
+      "sha256": "7b8860db3f3cd4b0f3174d876186e1eaed3369faa8137612099ff6d8cdf1c901"
+    },
+    {
+      "path": "assets/ui-icons/arrow-trend-up.png",
+      "size": 2800,
+      "sha256": "405cb8c145701e20535ce225298de7a441070d3647689cce5fd681121d860398"
+    },
+    {
+      "path": "assets/ui-icons/bars-progress.png",
+      "size": 1692,
+      "sha256": "f034c1c50f729969ae8c9d0f64fe46b00d6c57a64198e563193c419659623db5"
+    },
+    {
+      "path": "assets/ui-icons/bookmark.png",
+      "size": 1697,
+      "sha256": "b3f9cd32bced80cd4b55c2fa49575e83a68e0a8cf29c8c7a0f2919bf7fe070bd"
+    },
+    {
+      "path": "assets/ui-icons/bookmarks.png",
+      "size": 2480,
+      "sha256": "f7dbf50943ec35dff68b39ab2ee216212e01e2dd6152101e9cbd090145ec9d77"
+    },
+    {
+      "path": "assets/ui-icons/calendar.png",
+      "size": 2308,
+      "sha256": "424f0518b6ca8a0efb32ae1e0cf75e2aaeca28b13652187d60afa366b4b4ca43"
+    },
+    {
+      "path": "assets/ui-icons/check.png",
+      "size": 3054,
+      "sha256": "a9006ce518c848e1710c28c0cd4cc1afc2e575c86b74c4a02735bbc7f13cdd8d"
+    },
+    {
+      "path": "assets/ui-icons/chevron-right.png",
+      "size": 2377,
+      "sha256": "a2168a7b26bf1a39eb66a5d43d5e5211aa7644e4914497dcae9029951ae2414a"
+    },
+    {
+      "path": "assets/ui-icons/circle-check.png",
+      "size": 4222,
+      "sha256": "5596b4b2e7012569338f9a44fb74fc6cf51638d4dc142422d0447a175d237b45"
+    },
+    {
+      "path": "assets/ui-icons/circle-info.png",
+      "size": 4005,
+      "sha256": "faaa03b5030af582f25336e0b8e81f288e4c38b41369db7269662e0c5c91c3fe"
+    },
+    {
+      "path": "assets/ui-icons/circle-play.png",
+      "size": 3957,
+      "sha256": "f9f1cf08a42de224e95ee465513d18e1f095124f2508b1cb677c11c50a9e0d47"
+    },
+    {
+      "path": "assets/ui-icons/clock.png",
+      "size": 3811,
+      "sha256": "5121e823a7412924729902518c6905248909f0c769d0eac3489a916db4372922"
+    },
+    {
+      "path": "assets/ui-icons/compass.png",
+      "size": 8255,
+      "sha256": "3dbcaf7059bf0b4560ecce0b8a62dccc1f04fbf668bdcbb025ffec7eb3cace9c"
+    },
+    {
+      "path": "assets/ui-icons/eye.png",
+      "size": 5029,
+      "sha256": "3c8b33b58d53411925b1d85cccc6ff8acfa6c5a98af7da9a3fe275dcb5ac8c05"
+    },
+    {
+      "path": "assets/ui-icons/film.png",
+      "size": 3186,
+      "sha256": "ff279268389834e8fdc1dd707c0a5d789940cec0a724f8d16a23e3649001296d"
+    },
+    {
+      "path": "assets/ui-icons/filter.png",
+      "size": 2337,
+      "sha256": "ff52a23bcac0fcdb2eb3706da3abcf1a087233087c8bd5b9b41417558f41c964"
+    },
+    {
+      "path": "assets/ui-icons/grid.png",
+      "size": 3592,
+      "sha256": "f84210b2589562df4eb33d925cba5f6ccada566d77d88a7ff1767e1c0e8481d3"
+    },
+    {
+      "path": "assets/ui-icons/heart.png",
+      "size": 2971,
+      "sha256": "4d4f6eca60e926f9560c0c3c65e9aea470d8b1b9e621f54463defa343652cf12"
+    },
+    {
+      "path": "assets/ui-icons/home.png",
+      "size": 2964,
+      "sha256": "25c481c58ffa61f2a9903c7171b06a4af6b5b880e489aa6aaf7c72566fedeefd"
+    },
+    {
+      "path": "assets/ui-icons/info.png",
+      "size": 6955,
+      "sha256": "c00ea8796fa4815bcee8eee7512ba626a6a58ca215c07116a5ac018b345d8efc"
+    },
+    {
+      "path": "assets/ui-icons/list-check.png",
+      "size": 3898,
+      "sha256": "351257faa3a2af10eed0e7d1f9564e9db1bb1f0bb51c5947bce14f60ab91157e"
+    },
+    {
+      "path": "assets/ui-icons/list.png",
+      "size": 2349,
+      "sha256": "70b18133af3da4aba22e43fa2a2c596f922306a214c8caae3e126649d5a4176b"
+    },
+    {
+      "path": "assets/ui-icons/mask.png",
+      "size": 4350,
+      "sha256": "2a3baa0235e11e4c730dad2e36114f04f855f16a51baa4cab20b75633e911779"
+    },
+    {
+      "path": "assets/ui-icons/minus.png",
+      "size": 644,
+      "sha256": "e19c18a667fc9b8b47cd4aba798cb267891d2d5ca5fa690287f54bdcf6870c15"
+    },
+    {
+      "path": "assets/ui-icons/person.png",
+      "size": 2638,
+      "sha256": "00062a9ae5c4a938bc9171e4a030a960bbe9fedab7b8c46bcc7db0dae5da98ca"
+    },
+    {
+      "path": "assets/ui-icons/play.png",
+      "size": 5248,
+      "sha256": "15a3c0deab15c2638acdef6b98c797f2710dcdc053846df34f5becf7bac0b9ea"
+    },
+    {
+      "path": "assets/ui-icons/play2.png",
+      "size": 2113,
+      "sha256": "6ec4c6c9032c7c9e84e046d6d58b84add93aceb23c077c1e478deb3154c86bac"
+    },
+    {
+      "path": "assets/ui-icons/plus.png",
+      "size": 1549,
+      "sha256": "082f539257235cbc03db06a5ba1477ec1e7eabb646404c3324711d1b5c820773"
+    },
+    {
+      "path": "assets/ui-icons/search.png",
+      "size": 4594,
+      "sha256": "b3f9152c18966b227b9224356480d1f8455d4cbe4e50e14a07222c2934214572"
+    },
+    {
+      "path": "assets/ui-icons/settings-basic.png",
+      "size": 2485,
+      "sha256": "ae277fea2b95a7c51ed548d5bd0d944ec6aab6f36fe569b543821bf32856036c"
+    },
+    {
+      "path": "assets/ui-icons/settings.png",
+      "size": 5287,
+      "sha256": "0049a5cf233dae59a33ed8ec8cf24d366b0f535080356bc3ea909764ea93890b"
+    },
+    {
+      "path": "assets/ui-icons/shuffle.png",
+      "size": 4511,
+      "sha256": "5bc9392dfa2956cc4bf3de345b169b5059cc29593b09ae532a541fbec0152cac"
+    },
+    {
+      "path": "assets/ui-icons/sidemenu.png",
+      "size": 2925,
+      "sha256": "3b1468414f186fa726aa3f84e196b5987ddfe8e193e9866f96c32a2af088e2af"
+    },
+    {
+      "path": "assets/ui-icons/sliders.png",
+      "size": 4337,
+      "sha256": "601e0ce70417c6ae96799565cf88180d037a3556c58256d7bfc39fecc566b64f"
+    },
+    {
+      "path": "assets/ui-icons/star.png",
+      "size": 3412,
+      "sha256": "b682aa555e78f4786cefd8af6750aeb3aab52636b76320ad1e58bdec9cdee75b"
+    },
+    {
+      "path": "assets/ui-icons/tv.png",
+      "size": 1474,
+      "sha256": "658a5f0736ea1f78f01306223d3b67f0fd53e6b6ec04c468f15862b2a56a4b52"
+    },
+    {
+      "path": "assets/ui-icons/tvguide.png",
+      "size": 7450,
+      "sha256": "c571e579c0cb3b17bb7d496ac9d7be78d93c4695a365cec3295a9a427f1b1ee5"
+    },
+    {
+      "path": "assets/ui-icons/user.png",
+      "size": 2662,
+      "sha256": "8633a01530cfffa5c080b9941652c3fe02d66b9eb75d717b99943acc8e82f429"
+    },
+    {
+      "path": "assets/ui-icons/view-list.png",
+      "size": 2838,
+      "sha256": "18e4485203f59fde3aabe7fce3ef088694282282bb139e67bd9b83258a4d7cc2"
+    },
+    {
+      "path": "assets/ui-icons/watched-hide.png",
+      "size": 5257,
+      "sha256": "9f9de107e7250a05c7b046d3f705196d0a8b0fa445e6ebbc97dc0f98c578d559"
+    },
+    {
+      "path": "assets/ui-icons/watched-show.png",
+      "size": 4401,
+      "sha256": "2c6a3956e4b1299d137e7665c7c0da584ea8bc9dff3f6db38f8c33d7e259eccc"
+    },
+    {
+      "path": "assets/ui-icons/watchlist.png",
+      "size": 4513,
+      "sha256": "a78f5870ad38a04290dedd53c1ce1b4ff072a214afa95079d9624d1a9f6a1228"
+    },
+    {
+      "path": "assets/ui-icons/xmark.png",
+      "size": 5213,
+      "sha256": "2ec8ec164d62ddf04fa6ae2d1b795d6496424790b5deb3f1f65803230d3d667b"
+    }
+  ]
+}

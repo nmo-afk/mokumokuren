@@ -1,0 +1,99 @@
+{
+  "date": "2026-11-17",
+  "work_step": 4,
+  "work_status": "complete",
+  "countdown_basis": "Each owner request to continue is one implementation/review work step, per 17 November clarification.",
+  "completed_work_steps": 4,
+  "planned_work_steps": 5,
+  "remaining_work_steps": 1,
+  "previous_acceptance_counter_superseded_for_work_countdown": true,
+  "core_checks_passed": 40,
+  "core_checks_total": 40,
+  "runtime_files_verified": 97,
+  "new_regression_case_groups": [
+    "versionCase",
+    "firstInstallCase",
+    "busyConsentCase",
+    "otherTabCase",
+    "activationFailureCase",
+    "providerWriteCase"
+  ],
+  "verified_source_fixes": [
+    "The active worker serves HTML and static assets only from its own named cache.",
+    "A controlled shell navigation keeps the current release until explicit update consent.",
+    "First installation does not show an update-in-another-tab notice.",
+    "Trakt/AniList mutation activity holds through response consumption and releases after success or failure.",
+    "Pending writes disable update consent; a write begun during activation delays the accepted reload.",
+    "Other tabs retain explicit reload choice, and activation-message failures restore a usable action."
+  ],
+  "browser": {
+    "engine": "Chrome",
+    "origin_mode": "local_preview",
+    "service_worker_mode": "actual_browser_worker",
+    "account_write_mode": "held_sample_activity_only",
+    "live_provider_requests": 0,
+    "production_deployment": false,
+    "os_pwa_installation_tested": false,
+    "preview_diagnostics_packaged": false,
+    "checks": [
+      {
+        "check": "fresh worker install",
+        "controller": true,
+        "active": "activated",
+        "shell_caches": 1,
+        "update_notice": false
+      },
+      {
+        "check": "cached startup with preview server stopped",
+        "shell": "A",
+        "main_visible": true,
+        "network_test_endpoint": "unreachable"
+      },
+      {
+        "check": "staged B and reload before consent",
+        "visible_shell": "A",
+        "waiting": "installed",
+        "shell_caches": 2,
+        "update_notice": true
+      },
+      {
+        "check": "pending sample save",
+        "reload_enabled": false,
+        "enabled_after_finish": true
+      },
+      {
+        "check": "keyboard update consent",
+        "visible_shell": "B"
+      },
+      {
+        "check": "second tab during activation",
+        "visible_shell": "A",
+        "sample_save_retained": true,
+        "own_reload_choice_after_save": true
+      },
+      {
+        "check": "second tab accepts",
+        "both_visible_shells": "B",
+        "shell_caches": 1,
+        "update_notice": false
+      }
+    ],
+    "limitations": [
+      "The server was stopped; browser network state was not changed to airplane mode.",
+      "Preview builds add public labels/diagnostics to current worker and app code; those additions are not shipped.",
+      "Sample save activity is synthetic; no real provider mutation occurred.",
+      "Production HTTPS, iPhone/Safari and OS-level installation remain pending."
+    ]
+  },
+  "release_acceptance": {
+    "live_trakt": "pending_connected_current_candidate",
+    "live_anilist": "pending_connected_current_candidate",
+    "production_https_and_real_devices": "pending",
+    "owner_manual_github_netlify_release": "pending"
+  },
+  "next_work_step": "Final source/configuration audit, release-candidate packaging and owner handoff.",
+  "source_sha256": {
+    "app.js": "8de7d575bf72b6b97d7f435ab9569d064d4384882482a58da1342803542d5359",
+    "service-worker.js": "a1d8d3f56490b0f2fc491b027b23224f72af2bdc42282642751d65ff38d304dc"
+  }
+}

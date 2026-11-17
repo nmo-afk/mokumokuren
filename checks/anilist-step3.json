@@ -1,0 +1,73 @@
+{
+  "date": "2026-11-17",
+  "step": 3,
+  "status": "in_progress",
+  "completed_release_steps": 1,
+  "estimated_remaining_release_steps": 4,
+  "observations": {
+    "candidate_sha256_verified": true,
+    "anilist_test_token_available": false,
+    "authenticated_live_requests": 0,
+    "deployment_performed": false
+  },
+  "verified_source_fixes": [
+    "A replaced or invalidated collection fetch cannot commit stale same-account progress.",
+    "Status updates reconcile returned progress, status and repeat counts across anime records.",
+    "Nullable counters preserve the last confirmed value.",
+    "Status and episode mutations share a per-account and per-title lock.",
+    "Delayed anime confirmations do not change records in another media section with a colliding ID.",
+    "Detail counters, bar, statuses and button bounds refresh together after confirmed status or progress."
+  ],
+  "regression_case_groups": [
+    "refreshCase",
+    "mutationCase",
+    "statusCase",
+    "concurrentCase",
+    "sectionCase",
+    "detailCase"
+  ],
+  "core_checks_passed": 39,
+  "core_checks_total": 39,
+  "runtime_files_verified": 97,
+  "browser": {
+    "engine": "Chrome",
+    "provider_mode": "fixture",
+    "live_provider_calls": 0,
+    "fixture_is_packaged": false,
+    "checks": [
+      {
+        "check": "Completed status applies returned progress",
+        "count": "12 / 12",
+        "plus_enabled": false
+      },
+      {
+        "check": "Rewatching applies returned zero progress",
+        "count": "0 / 12",
+        "plus_enabled": true
+      },
+      {
+        "check": "Rewatch +1",
+        "count": "1 / 12"
+      },
+      {
+        "check": "Rejected Paused retains confirmed state",
+        "count": "1 / 12",
+        "status": "REPEATING"
+      },
+      {
+        "check": "Rewatch -1",
+        "count": "0 / 12"
+      },
+      {
+        "check": "Header Mark Watched refreshes progress and controls",
+        "count": "12 / 12",
+        "plus_enabled": false
+      }
+    ],
+    "limitation": "The fixture returns Completed=12, Rewatching=0 and a rewatch count; these are sample replies, not evidence of live AniList behavior."
+  },
+  "full_playwright_browser_suites": "not_run_in_this_environment",
+  "live_read_write_readback": "pending_authenticated_candidate",
+  "next_independent_work": "Step 4 installation, offline and update source review; real-device acceptance remains pending.",
+  "app_source_sha256": "64bec216623a060a2e7d580f6eea027b90ce546c7d2ca35258067f3acc6884b9"
+}

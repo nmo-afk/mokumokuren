@@ -1,0 +1,69 @@
+{
+  "date": "2026-11-17",
+  "candidate": "1.0.0-rc.1",
+  "work_step": 5,
+  "work_status": "complete",
+  "completed_work_steps": 5,
+  "planned_work_steps": 5,
+  "remaining_work_steps": 0,
+  "core_checks": {
+    "passed": 41,
+    "total": 41,
+    "group": "core",
+    "executed_from": "prepared GitHub source tree"
+  },
+  "runtime_files_verified": 97,
+  "runtime_files_unchanged_since_step4": 97,
+  "source_staging": {
+    "regression_passed": true,
+    "current_docs_and_design_spec": true,
+    "node_24_pin": true,
+    "windows_launcher": true,
+    "test_artwork_preserved": true,
+    "backend_imports_resolve": true,
+    "identical_rebuilt_runtime": true,
+    "prepared_file_count": 289
+  },
+  "source_audit": {
+    "private_file_findings": [],
+    "inline_private_key_or_literal_bearer_findings": [],
+    "example_secrets_blank": true,
+    "python_sources_parsed": 94,
+    "relative_backend_imports_resolved": 10,
+    "scope": "Selected source/evidence files for this archive; this is not an audit of external account settings."
+  },
+  "live_verifier": {
+    "expected_inventory": "checks/candidate-integrity.json",
+    "compares_entire_runtime_inventory": true,
+    "entry_points_hashed": [
+      "index.html",
+      "app.js",
+      "style.css",
+      "trakt-rebuild.css",
+      "service-worker.js",
+      "manifest.webmanifest"
+    ],
+    "mock_regression_passed": true,
+    "production_probe_run": false,
+    "limitations": "Only the six entry-point bodies are individually downloaded/hashed by the live script; the entire 97-file inventory is compared. Configuration and anonymous reads do not establish authenticated writes or device behavior."
+  },
+  "browser_evidence": "Retained from work steps 1, 3 and 4; no new UI/runtime changes in step 5.",
+  "legacy_full_playwright_media_library_groups": "not_rerun_for_this_candidate",
+  "production_deployment": false,
+  "provider_account_mutations": 0,
+  "release_acceptance": {
+    "production_configuration_and_exact_candidate": "pending owner publication and read-only probes",
+    "trakt_oauth_tracking_readback": "pending",
+    "anilist_oauth_progress_readback": "pending",
+    "cross_device_phone_safari_pwa": "pending",
+    "owner_final_1_0_0_signoff": "pending"
+  },
+  "handoff": "OWNER-RELEASE-HANDOFF.md",
+  "next_action": "Owner uploads source to GitHub with builds stopped, then makes one deliberate Netlify candidate deployment and records live acceptance.",
+  "source_sha256": {
+    "app.js": "8de7d575bf72b6b97d7f435ab9569d064d4384882482a58da1342803542d5359",
+    "service-worker.js": "a1d8d3f56490b0f2fc491b027b23224f72af2bdc42282642751d65ff38d304dc",
+    "scripts/prepare-source-tree.mjs": "21c58a859e32e3ef12159e1d5be480fb7ed41e07e2ec1c62e0e518cf818c2433",
+    "scripts/verify-live-deploy.mjs": "b7036c357c518cd184e734140429af177d126afeb47e39593f7406f2f7c3d337"
+  }
+}
