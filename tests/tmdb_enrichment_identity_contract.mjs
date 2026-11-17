@@ -1,0 +1,54 @@
+import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
+import vm from 'node:vm';
+const src=readFileSync(new URL('../app.js',import.meta.url),'utf8');
+const code=src.slice(src.indexOf('// mokumokuren_rc2_enrichment'),src.indexOf('// Read-only recovery is deliberately bounded.'));
+const calls=[],samples=[];
+let broken=false;
+const sandbox={read:()=>({}),store:()=>{},title:x=>x?.title||x?.name||'Untitled',toast:()=>{},console,
+ tmdb:async(path,params={})=>{
+  calls.push([path,params]);
+  if(path==='/search/multi'){
+   if(broken)throw Error('proxy offline');
+   const query=params.query;
+   return {results:samples.filter(s=>(s.title||s.name)===query)};
+  }
+  if(path.endsWith('/123'))throw Error('TMDB HTTP 400');
+  const id=Number(path.split('/').at(-1));
+  return {id,poster_path:'/hero.jpg',backdrop_path:'/background.jpg',overview:'Full synopsis',release_date:'2024-06-10',vote_average:8};
+ }};
+vm.createContext(sandbox);
+vm.runInContext(code+'\nglobalThis.exports={tmdbSearchMatch,enrichTraktItem,resolveTmdbIdentity};',sandbox);
+const {tmdbSearchMatch,enrichTraktItem,resolveTmdbIdentity}=sandbox.exports;
+let n=0;const done=()=>n++;
+const older={id:11,title:'Parallel',release_date:'1999-05-11',media_type:'movie',poster_path:'/old.jpg'};
+const newer={id:77,title:'Parallel',release_date:'2024-04-12',media_type:'movie',poster_path:'/new.jpg'};
+samples.push(older,newer);
+assert.equal(tmdbSearchMatch({title:'Parallel',year:2024},samples,'movie').id,77);done();
+assert.equal(tmdbSearchMatch({title:'Parallel',year:2008},samples,'movie'),null);done();
+assert.equal(tmdbSearchMatch({title:'Parallel'},samples,'movie'),null);done();
+assert.equal(tmdbSearchMatch({title:'Parallel',year:2024},[{...newer,media_type:'tv'}],'movie'),null);done();
+const item={title:'Parallel',year:2024,trakt_id:301,ids:{trakt:301}};
+const enriched=await enrichTraktItem(item,'movie');
+assert.equal(enriched.tmdb_id,77);assert.equal(enriched.poster_path,'/new.jpg');assert.equal(enriched.ids.trakt,301);done();
+const previousCalls=calls.length;
+assert.equal((await enrichTraktItem(item,'movie')).tmdb_id,77);
+assert.equal(calls.length,previousCalls,'valid cache must avoid repeat search');done();
+const tvTitle={id:99,name:'Parallel',first_air_date:'2024-03-10',media_type:'tv',poster_path:'/tv.jpg'};
+samples.push(tvTitle);
+const resolved={name:'Parallel',year:2024,trakt_id:400};
+assert.equal(await resolveTmdbIdentity(resolved,'tv'),99);
+assert.equal(resolved.tmdb_id,99);assert.equal(resolved.poster_path,'/tv.jpg');done();
+const ambiguous={title:'Parallel'};
+assert.equal(await resolveTmdbIdentity(ambiguous,'movie'),0);done();
+samples.push({id:123,title:'Another',release_date:'2024-03-10',media_type:'movie',poster_path:'/correct.jpg'});
+const withID={title:'Another',year:2024,tmdb_id:123};
+const rescued=await enrichTraktItem(withID,'movie');
+assert.equal(rescued.tmdb_id,123);assert.equal(rescued.poster_path,'/correct.jpg');done();
+samples.push({id:999,title:'Legacy',release_date:'2024-03-10',media_type:'movie',poster_path:'/wrong.jpg'});
+const unverified=await enrichTraktItem({title:'Legacy',year:2024,tmdb_id:123},'movie');
+assert.equal(unverified.poster_path,undefined,'do not use art from another TMDB id');done();
+broken=true;
+const unavailable=await enrichTraktItem({title:'Unknown',year:2024,trakt_id:500},'movie');
+assert.equal(unavailable.tmdb_id,undefined,'API errors may not invent identities');done();
+console.log(`TMDB identity enrichment contract: ${n}/${n} passed`);
