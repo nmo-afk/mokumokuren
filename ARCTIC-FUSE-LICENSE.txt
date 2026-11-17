@@ -1,0 +1,15 @@
+This work is licensed under the Creative Commons Attribution-NonCommercial-ShareAlike 4.0 Unported License.
+To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-sa/4.0/
+or send a letter to Creative Commons, 171 Second Street, Suite 300, San Francisco, California, 94105, USA.
+
+Mokumokuren asset attribution (selected interface icon PNGs):
+Arctic Fuse (Kodi skin), by jurialmunkey:
+https://github.com/jurialmunkey/skin.arctic.fuse
+Arctic Fuse Mod derivative project:
+https://github.com/OfficerKD637/skin.arctic.fuse.mod
+Anime mask source: extras/icons/mask.png in the supplied Arctic Fuse 3 Piers skin.
+
+The selected icons are redistributed for this app; the original upstream
+per-file icon provenance and compatibility of the intended distribution with
+the CC BY-NC-SA licence have NOT yet been independently signed off.
+Commercial use is not permitted by that licence without additional permission.

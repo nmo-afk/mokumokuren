@@ -1,0 +1,57 @@
+PASS Unit regression (2.6s)
+PASS JavaScript syntax (0.1s)
+PASS Python syntax (0.1s)
+PASS Netlify syntax: anilist-token.mjs (0.1s)
+PASS Netlify syntax: anilist.mjs (0.1s)
+PASS Netlify syntax: release-health.mjs (0.1s)
+PASS Netlify syntax: tmdb.mjs (0.1s)
+PASS Netlify syntax: trakt-token.mjs (0.1s)
+PASS Netlify syntax: trakt.mjs (0.1s)
+PASS API contract: account_session_boundary_contract.mjs (1.7s)
+PASS API contract: anilist_oauth_callback_contract.mjs (0.1s)
+PASS API contract: anilist_proxy_resilience.mjs (0.1s)
+PASS API contract: anilist_token_contract.mjs (0.1s)
+PASS API contract: deployment_smoke_contract.mjs (0.1s)
+PASS API contract: integration_recovery_contract.mjs (0.1s)
+PASS API contract: live_deploy_verifier_contract.mjs (0.2s)
+PASS API contract: release_bundle_integrity_contract.mjs (0.8s)
+FAIL API contract: release_cache_version_contract.mjs (0.2s)
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Deployed worker must match complete source asset hashes
+    at file:///workspace/scratch/24fa47aa7182/work/Mokumokuren-Replica-Step6-Mobile/tests/release_cache_version_contract.mjs:23:1 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}
+
+Node.js v24.22.1
+PASS API contract: release_configuration_contract.mjs (0.1s)
+PASS API contract: release_deadline_contract.mjs (0.2s)
+PASS API contract: release_hardening_contract.mjs (0.2s)
+PASS API contract: service_worker_contract.mjs (0.1s)
+PASS API contract: stale_load_isolation_contract.mjs (0.2s)
+PASS API contract: tmdb_enrichment_identity_contract.mjs (0.2s)
+PASS API contract: tmdb_proxy_contract.mjs (0.2s)
+PASS API contract: trakt_detail_reviews_step4.mjs (0.2s)
+PASS API contract: trakt_library_step7_contract.mjs (0.1s)
+PASS API contract: trakt_oauth_contract.mjs (0.1s)
+PASS API contract: trakt_oauth_gateway_fallback.mjs (0.1s)
+PASS API contract: trakt_pagination_gateway_step7.mjs (0.1s)
+PASS API contract: trakt_proxy_no_content.mjs (0.2s)
+PASS API contract: trakt_read_gateway_fallback.mjs (0.1s)
+PASS API contract: trakt_refresh_backend.mjs (0.2s)
+PASS API contract: trakt_refresh_contract.mjs (0.2s)
+PASS API contract: trakt_show_watched_write_step7.mjs (0.1s)
+RESULT: 34/35 checks passed [core]
+FAILED: API contract: release_cache_version_contract.mjs
+
+AFTER REBUILD:
+Mokumokuren release build: 94 allowlisted runtime files + integrity manifest.
+PASS offline prepublication audit: 94 integrity-verified runtime files; zero network calls.
+PASS production cache version matches all shipped source assets and changes with code/artwork updates.

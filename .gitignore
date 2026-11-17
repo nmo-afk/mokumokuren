@@ -1,0 +1,17 @@
+# No environment secrets or personal tokens in the first public source release.
+.env
+.env.*
+!.env.example
+*.pem
+*.p12
+*.key
+*.log
+node_modules/
+__pycache__/
+.pytest_cache/
+.DS_Store
+*.zip
+# Netlify builds this independently from allowlisted source assets.
+dist/
+# Automatically prepared release upload; never nest into a public repository.
+release-github-source/

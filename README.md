@@ -1,44 +1,63 @@
-# Mokumokuren v0.2 — first deployable development build
+# Mokumokuren 1.0.0-rc.1
 
-A mobile-first PWA for Movies (Trakt), TV Shows (Trakt), and Anime (AniList).
+This is the release-candidate source for the personal Movies, TV and Anime app. Movies and TV use Trakt, anime uses AniList, and TMDB supplies movie/TV discovery and metadata. The interface uses the supplied Trakt reference structure, burgundy `#960012`, gold `#FBD242`, ivory `#F2F4F3`, top mobile navigation, Trakt icons and Arctic Fuse fallbacks.
 
-## Deploy correctly
+Start with [OWNER-RELEASE-HANDOFF.md](OWNER-RELEASE-HANDOFF.md) for the owner's manual GitHub/Netlify publication. [LATEST-CHECKPOINT.md](LATEST-CHECKPOINT.md) and [RELEASE-PROGRESS.md](RELEASE-PROGRESS.md) record the work countdown. [RELEASE-V1-ACCEPTANCE.md](RELEASE-V1-ACCEPTANCE.md) records live checks still required. Older `STEP-*`, `REPLICA-*` and `DEVELOPMENT-*` notes describe historical checkpoints; the current handoff and progress tracker supersede their old counts and planning estimates.
 
-**Recommended: connect a GitHub repository to Netlify.** Upload the entire source tree, including `netlify/functions` and `netlify.toml`, to GitHub. In Netlify choose Import a Git repository, set publish directory to `.` and leave build command blank. This ensures Netlify Functions are deployed. A manual static ZIP upload will **not** install the serverless functions and therefore will not provide working TMDB/Trakt/AniList proxy APIs.
+The source includes Watchlist, In Progress, Watched, recommendations/discovery, title details, season/episode tracking, confirmed AniList progress and rewatches, account/session recovery and a public-asset offline shell. My Lists and Smart Lists are deferred to v2.0.0. Ratings shown are external/community values; there is no personal rating input. [CONFIRMED-DESIGN-SPEC.md](CONFIRMED-DESIGN-SPEC.md) is the visual specification.
 
-Under Netlify > Project configuration > Environment variables add:
+## Build and deployment configuration
 
-- `TMDB_READ_TOKEN` = a **new/rotated** TMDB API Read Access Token (secret; never commit it)
-- `TRAKT_CLIENT_ID` = your Trakt public client ID
+Node 24 is pinned in `.nvmrc`. The production build uses Node built-ins and requires no npm dependencies or package installation.
 
-No AniList secret is needed for the current implicit OAuth approach.
+| Setting | Value |
+| --- | --- |
+| Repository/base directory | The project root containing `netlify.toml` |
+| Build command | `node scripts/build-release.mjs` |
+| Publish directory | `dist` |
+| Functions directory | `netlify/functions` |
+| Static runtime | 97 allowlisted files plus `release-integrity.json` |
+| Backend | Six function handlers with imported modules under `netlify/lib` |
 
-After the site is deployed, get its real HTTPS URL, then register **exactly** `https://YOUR-SITE.netlify.app/callback` as the OAuth redirect for both Trakt and AniList, and `https://YOUR-SITE.netlify.app` as Trakt's allowed origin. Ensure your Trakt development application permits the chosen PKCE flow.
+The build excludes local login/server helpers, tests, fixtures and development documents from `dist`. A production deployment must also package the Functions backend. A static-only upload of `dist` cannot provide those APIs.
 
-## What works in this build
+## Provider configuration
 
-- Three primary sections and five sub-tabs each, responsive cinematic UI, swipe navigation, last-used section, grid/list toggle, Discovery Balance preferences, PWA manifest.
-- TMDB movie/TV trending, discovery and search **when the function is deployed and token configured**.
-- AniList public anime discovery/search, private list retrieval and planning/completed mutations **when login and proxy work**.
-- Trakt PKCE login attempt, watchlist/watched/playback reads **when login and proxy work**.
-- Local Not Interested / More Like This preferences, and fictional preview data toggle.
+Configure these privately in Netlify for production, with Functions runtime scope (or All scopes when per-scope controls are unavailable):
 
-## Known gaps (do not represent as complete)
+- `MOKUMOKUREN_ORIGIN`: the exact HTTPS origin, with no trailing slash or path.
+- `TMDB_READ_TOKEN`: private TMDB API read token.
+- `TRAKT_CLIENT_ID`: the public application ID from `.env.example`, which must match `app.js`.
+- `ANILIST_CLIENT_ID`: the public application ID from `.env.example`, which must match `app.js`.
+- `ANILIST_CLIENT_SECRET`: private AniList OAuth secret.
 
-- Trakt writes are **disabled** pending robust TMDB↔Trakt ID matching and testing. UI reports this rather than pretending to sync.
-- Recommendation ranking is basic trending/public discovery, not yet personalised from both accounts. Discovery Balance is a saved setting, not yet wired to ranking.
-- Mood search is keyword-based, not AI. No free inference service is connected.
-- No episode-level editing, bulk editing, offline data cache, rewatches, notifications, advanced streaming-provider filters, community similarity ranking, or cross-source ratings yet.
-- Trakt OAuth implementation needs end-to-end validation; a future update should add OAuth state verification, refresh-token support, secure server-side session handling and a fully tested PKCE exchange.
-- AniList implicit tokens are held in sessionStorage; consider replacing with an appropriate more secure session architecture for public release.
-- Search year/genre/sort are limited for AniList; TV/movie discovery filtering needs further integration.
-- Some Trakt library records lack artwork until TMDB enrichment is implemented.
-- Fictional preview titles are placeholders, not real catalogue data.
+Register the exact `${MOKUMOKUREN_ORIGIN}/callback` in both OAuth applications. Missing or mismatched configuration fails closed. The repository contains public client IDs and empty secret placeholders only. Keep personal access tokens and secrets out of source and chat.
 
-## Security
+## Developer verification
 
-Previously shared TMDB token/key and AniList secret were exposed in screenshots. Rotate/recreate them. Never paste secrets into chat, source code or a public GitHub repo. The app deliberately does not include those secrets.
+```sh
+node scripts/build-release.mjs
+node scripts/audit-release-bundle.mjs
+python tests/run_release_regression.py --group core
+node scripts/prepare-source-tree.mjs
+```
 
-## Attribution
+The source staging script produces the ignored `release-github-source/` tree and does not push or deploy. It includes the current design/progress documents, backend modules, source checks and supplied test artwork. Its regression builds that staged tree and checks that its production inventory matches the original.
 
-This product uses the TMDB API but is not endorsed or certified by TMDB. Follow TMDB's current logo/attribution requirements before publication. AniList and Trakt trademarks and API terms also apply.
+The final staged-source core group passed **41/41 checks**, and the build/audit verified **97 runtime files**. The audit details and limitations are recorded in `checks/release-step5.json`. Chrome evidence from the preceding steps covers fixture interactions and actual local service-worker startup/update behavior. The full legacy Playwright media/library groups were not rerun for this candidate. Live accounts and production phone/Safari behavior remain pending.
+
+## After the owner's candidate deployment
+
+Optional read-only verification with Node already installed:
+
+```sh
+node scripts/verify-live-deploy.mjs https://YOUR-SITE.netlify.app
+```
+
+This uses `checks/candidate-integrity.json` to compare the deployed 97-file inventory and the actual HTML, JS, CSS, worker and manifest entry-point bytes. It also probes configuration, TMDB and anonymous AniList reads. An optional `TRAKT_TEST_ACCESS_TOKEN` from the secure environment adds a read-only identity check. It does not establish authenticated writes, cross-device sync or OS-level installation. A different candidate or stale asset fails the identity check.
+
+The worker caches public app assets only. Provider account data and edits require a connection. Updates wait for explicit consent and active provider saves; other tabs retain their own reload choice.
+
+## Credits
+
+Mokumokuren is a personal, non-commercial app. Existing attribution is preserved in `ARCTIC-FUSE-LICENSE.txt` and the app settings. This product uses the TMDB API but is not endorsed or certified by TMDB. The owner's existing decision to defer additional per-icon research for this personal-use scope is unchanged.
