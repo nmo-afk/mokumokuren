@@ -1,6 +1,6 @@
 import {approvedCallbackUri} from '../lib/oauth-origin.mjs';
 import {secureApiResponse} from '../lib/response-security.mjs';
-// Token exchanges stay server-side, and responses must never be cached.
+// Server-side token exchanges must never be cached.
 // Trakt refresh tokens rotate on each successful exchange. PKCE does not use a client secret.
 const apiHandler = async request => {
   const noStore={'cache-control':'no-store'};
@@ -28,8 +28,8 @@ const apiHandler = async request => {
       ?{client_id:client,grant_type:'refresh_token',refresh_token:body.refresh_token}
       :{code:body.code,client_id:client,code_verifier:body.code_verifier,
         redirect_uri:body.redirect_uri,grant_type:'authorization_code'};
-    const upstream=await fetch('https://api.trakt.tv/oauth/token',{
-      method:'POST',headers:{'content-type':'application/json',accept:'application/json'},
+    const upstream=await fetch('https://auth.trakt.tv/oauth/token',{
+      method:'POST',headers:{'content-type':'application/json',accept:'application/json','user-agent':'Mokumokuren/1.0.0-rc.1'},
       body:JSON.stringify(payload),signal:AbortSignal.timeout(12000)
     });
     const raw=await upstream.text();

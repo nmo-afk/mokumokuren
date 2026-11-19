@@ -11,7 +11,7 @@ try {
  }
  let sent;
  globalThis.fetch=async (endpoint,opts)=>{
-  assert.equal(endpoint,'https://api.trakt.tv/oauth/token');
+  assert.equal(endpoint,'https://auth.trakt.tv/oauth/token');
   sent=JSON.parse(opts.body);
   return new Response(JSON.stringify({access_token:'new-access',refresh_token:'new-refresh',expires_in:604800}),{status:200,headers:{'content-type':'application/json'}});
  };

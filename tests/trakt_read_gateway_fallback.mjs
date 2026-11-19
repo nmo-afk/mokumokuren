@@ -44,6 +44,10 @@ await caseRun('Cloudflare 502 HTML', (url)=>url===direct?html('<h1>Sorry, you ha
 await caseRun('Gateway 503 HTML', (url)=>url===direct?html('<div>captcha challenge</div>',503):ok(),'recovered',[direct,proxy]);
 await caseRun('Browser CORS rejection', url=>url===direct?Promise.reject(Error('CORS')):ok(),'recovered',[direct,proxy]);
 await caseRun('Successful direct request', url=>json({user:{username:'direct'}}),'direct',[direct]);
+await caseRun('Direct GET has a JSON Content-Type', (url,_count,options)=>{
+ assert.equal(options.headers['content-type'],'application/json');
+ return ok();
+},'recovered',[direct]);
 await failingCase('403 JSON permission denial',()=>json({error:'permission_denied'},403),/403/, [direct]);
 await failingCase('401 JSON auth failure',()=>json({error:'invalid_token'},401),/Reconnect Trakt/, [direct]);
 await failingCase('429 HTML throttled',()=>html('Cloudflare throttle',429),/Trakt rate limit/, [direct]);
@@ -56,4 +60,6 @@ await caseRun('Proxy 503 retry stays on proxy', (url,count)=>{
  return count===2?json({error:'temporary outage'},503):ok();
 },'recovered',[direct,proxy,proxy]);
 await failingCase('Proxy 429 retry hint stops read',url=>url===direct?html('Cloudflare blocked',403):json({error:'throttled'},429,{'retry-after':'25'}),/25 seconds/,[direct,proxy]);
+await failingCase('Direct 429 never switches route or immediately retries',()=>json({error:'throttled'},429,{'retry-after':'0'}),/rate limit/,[direct]);
+await failingCase('Proxy Cloudflare block is not immediately retried',url=>url===direct?html('Cloudflare blocked',403):json({error:'Trakt upstream blocked by Cloudflare'},502,{'x-mokumokuren-trakt-blocked':'1'}),/Try refreshing in a few minutes/,[direct,proxy]);
 console.log(`PASS Trakt read gateway recovery: ${passed}/${passed} simulated scenarios`);

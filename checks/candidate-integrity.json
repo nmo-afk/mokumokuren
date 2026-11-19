@@ -8,8 +8,8 @@
     },
     {
       "path": "app.js",
-      "size": 211516,
-      "sha256": "8de7d575bf72b6b97d7f435ab9569d064d4384882482a58da1342803542d5359"
+      "size": 214735,
+      "sha256": "dcf4de44d425c2e6fb0b2090f9abfbb40fb0aa4d41f56ff07462d1b0472ff1ac"
     },
     {
       "path": "style.css",
@@ -19,7 +19,7 @@
     {
       "path": "service-worker.js",
       "size": 5831,
-      "sha256": "bf6ddc6b630ff70e3bdd625192aec619a0e970159d495e7830dae4f7e4281914"
+      "sha256": "6c721b2c229a22a0ae6bdc096661458641e5435a5f936be75c7e57dadff41d17"
     },
     {
       "path": "manifest.webmanifest",

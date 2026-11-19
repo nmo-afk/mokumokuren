@@ -5,23 +5,22 @@ ROOT=Path(__file__).resolve().parents[1]
 JS=(ROOT/'app.js').read_text()
 CSS=(ROOT/'style.css').read_text()+'\n'+(ROOT/'trakt-rebuild.css').read_text()
 fixture="""
+const realTrakt=trakt;
 trakt=async(path)=>{
- if(path.startsWith('/sync/watched/shows'))return [
-  {show:{title:'Halfway Through',ids:{trakt:11,tmdb:1011}}},
-  {show:{title:'Finished Series',ids:{trakt:22,tmdb:1022}}},
+ if(path.startsWith('/sync/progress/watched?page=1&'))return [
+  {show:{title:'Halfway Through',ids:{trakt:11,tmdb:1011}},
+   progress:{completed:3,aired:10,next_episode:{season:1,number:4,title:'Next Up'}}},
+  {show:{title:'Finished Series',ids:{trakt:22,tmdb:1022}},progress:{completed:10,aired:10,next_episode:null}},
   {show:{title:'Unavailable Progress',ids:{trakt:33,tmdb:1033}}},
  ];
- if(path.includes('/shows/11/progress/watched'))return {completed:false,completed_episodes:3,aired:10,next_episode:{season:1,number:4,title:'Next Up'}};
- if(path.includes('/shows/22/progress/watched'))return {completed:true,completed_episodes:10,aired:10};
- if(path.includes('/shows/33/progress/watched'))throw Error('Unavailable');
- if(path.startsWith('/sync/watchlist/shows'))return [{show:{title:'Saved For Later',ids:{trakt:44,tmdb:1044}}}];
+ if(path.startsWith('/sync/watchlist/shows?page=1&'))return [{show:{title:'Saved For Later',ids:{trakt:44,tmdb:1044}}}];
  if(path.startsWith('/sync/playback'))return [];
  return [];
 };
 enrichTraktCollection=async items=>items;
 state.trakt='fixture';state.section='TV Shows';state.tab='In Progress';
 await load();window.__ready=true;
-window.__test={state,load,renderMain,renderHomeDashboard};
+window.__test={state,load,renderMain,renderHomeDashboard,useRealTrakt:()=>{trakt=realTrakt}};
 """
 with sync_playwright() as pw:
  browser=pw.chromium.launch(executable_path='/usr/bin/chromium',args=['--no-sandbox'])
@@ -49,8 +48,37 @@ with sync_playwright() as pw:
   assert 'Halfway Through' in page.locator('#home-dashboard').inner_text()
   assert 'Finished Series' not in page.locator('#home-dashboard').inner_text()
   assert 'Saved For Later' in page.locator('#home-dashboard').inner_text()
+  page.evaluate("""async () => {
+    const t=window.__test;
+    t.useRealTrakt();
+    t.state.tab='In Progress';
+    window.__allowTraktRead=false;
+    window.fetch=async url=>{
+      if(url.startsWith('https://api.trakt.tv/sync/progress/watched?')){
+        if(window.__allowTraktRead)return Response.json([]);
+        throw new TypeError('Failed to fetch');
+      }
+      if(url.startsWith('/api/trakt?path=%2Fsync%2Fprogress%2Fwatched')){
+        return Response.json({error:'Trakt upstream blocked by Cloudflare',upstream_status:403},{status:502,headers:{'x-mokumokuren-trakt-blocked':'1'}});
+      }
+      throw new Error('Unexpected fixture request: '+url);
+    };
+    await t.load();
+  }""")
+  error=page.locator('#main .library-load-error[role="alert"]')
+  assert error.is_visible()
+  assert 'In Progress unavailable' in error.inner_text()
+  assert 'Cloudflare' in error.inner_text()
+  assert page.locator('#library-count').count()==0
+  assert page.locator('#library-empty').is_hidden()
+  page.evaluate('window.__allowTraktRead=true')
+  page.locator('#library-refresh').click()
+  page.wait_for_selector('#library-count')
+  assert page.locator('#library-count').inner_text()=='0'
+  assert page.locator('#library-empty').is_visible()
+  assert error.is_hidden()
   assert not errors,(width,errors)
   assert page.evaluate('document.documentElement.scrollWidth<=innerWidth'),(width,'horizontal overflow')
-  print(f'PASS {width}px: Trakt show categories, warnings, native watchlist, Continue Watching')
+  print(f'PASS {width}px: Trakt show categories, warnings, native watchlist, Continue Watching, gateway error and refresh recovery')
   page.close()
  browser.close()

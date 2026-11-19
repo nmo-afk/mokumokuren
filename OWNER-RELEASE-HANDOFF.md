@@ -34,6 +34,8 @@ Set the following production environment variables privately in Netlify with **F
 
 Both provider applications must register `${MOKUMOKUREN_ORIGIN}/callback` exactly. Use the production context; changing runtime variables requires a new deploy, so confirm them before building. A developer who already has the variables in a secure environment can run `node scripts/release-preflight.mjs https://YOUR-SITE.netlify.app`; it prints pass/block status without values. You do not need an intermediate local installation.
 
+In the Trakt application, also register the exact `MOKUMOKUREN_ORIGIN` under **JavaScript (CORS) origins** so that authenticated browser reads can reach Trakt. [Trakt CORS guide](https://developer.trakt.tv/docs/cors)
+
 ## 4. Make one deliberate candidate deployment
 
 After the GitHub commit and configuration are ready, activate builds. Inspect Deploys for the candidate commit. If no build is already queued/running, trigger one deployment for that commit; avoid starting a second build for the same upload. Verify the build log reports **97 allowlisted runtime files plus the integrity manifest** and that the six Functions handlers were packaged.

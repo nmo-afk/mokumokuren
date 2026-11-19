@@ -660,7 +660,7 @@ function renderLibraryPage(m,t,s,items){
   <header><h3 id="watchlist-sort-title">Sort By</h3><button type="button" class="chip watchlist-sort-close" data-sort-close aria-label="Close sort drawer">${uiIcon('xmark')}</button></header>
   <div class="watchlist-sort-options" role="group" aria-label="Watchlist order"></div>
  </dialog>`:'';
- const count=`<div class="library-total"><strong id="library-count">${items.length}</strong><span>titles</span></div>`;
+ const count=state.loading||state.loadError?'':`<div class="library-total"><strong id="library-count">${items.length}</strong><span>titles</span></div>`;
  const subtitle=t==='In Progress'&&s==='Movies'?'Movies with a resumable Trakt playback position.':
   t==='Watched'&&s==='TV Shows'?'Shows whose aired episodes are fully watched on Trakt.':
   t==='In Progress'&&s==='TV Shows'?'Shows with watched episodes and more episodes remaining.':
@@ -681,14 +681,24 @@ function renderLibraryPage(m,t,s,items){
   ${isWatchlist?'':toolbar}
   ${s==='Anime'&&t==='In Progress'?`<nav class="anime-library-tabs" aria-label="AniList watching status">${Object.entries(animeLibraryTabs).map(([value,label])=>`<button class="chip ${(animeLibraryStatusFilter||'all')===value?'active':''}" data-anime-library-filter="${value}" aria-pressed="${(animeLibraryStatusFilter||'all')===value}">${label}</button>`).join('')}</nav>`:''}
   ${state.libraryWarning?`<p class="muted library-sync-warning" role="status">${esc(state.libraryWarning)}</p>`:''}
+  ${state.loadError?`<div class="panel library-load-error" role="alert"><strong>${esc(label)} unavailable</strong><p>${esc(state.loadError)}</p></div>`:''}
   <div class="grid library-results${state.view==='list'?' list':''}" id="library-results"></div>
   <div id="library-empty" class="empty illustrated-empty" hidden></div>${sortDrawer}
  </div>`;
 
  const search=m.querySelector('#library-search'),sort=m.querySelector('#library-sort'),grid=m.querySelector('#library-results'),empty=m.querySelector('#library-empty');
+ const countLabel=m.querySelector('#library-count');
  if(sort)sort.value=libraryFilters.sort;
  m.querySelectorAll('[data-anime-library-filter]').forEach(b=>b.onclick=()=>{animeLibraryStatusFilter=b.dataset.animeLibraryFilter;m.querySelectorAll('[data-anime-library-filter]').forEach(z=>{z.classList.toggle('active',z===b);z.setAttribute('aria-pressed',String(z===b))});update()});
- const update=()=>{const subset=libraryResults(items);grid.innerHTML=subset.map((item,index)=>t==='In Progress'&&s!=='Movies'?replicaProgressCard(item,index,s):card(item,index)).join('');m.querySelector('#library-count').textContent=subset.length;empty.hidden=!!subset.length;if(!subset.length)empty.textContent=state.loading?'Loading your library…':state.loadError||(!items.length?`No ${label.toLowerCase()} titles yet. Connect ${s==='Anime'?'AniList':'Trakt'} in Settings.`:'No titles match your search.');grid.querySelectorAll('[data-library-index]').forEach(b=>b.onclick=()=>{const item=subset[Number(b.dataset.libraryIndex)];if(item)openItem(item)});wireQuickProgress()};
+ const update=()=>{
+  const subset=libraryResults(items);
+  grid.innerHTML=subset.map((item,index)=>t==='In Progress'&&s!=='Movies'?replicaProgressCard(item,index,s):card(item,index)).join('');
+  if(countLabel)countLabel.textContent=subset.length;
+  empty.hidden=!!subset.length||!!state.loadError;
+  if(!empty.hidden)empty.textContent=state.loading?'Loading your library…':!items.length?`No ${label.toLowerCase()} titles yet. Connect ${s==='Anime'?'AniList':'Trakt'} in Settings.`:'No titles match your search.';
+  grid.querySelectorAll('[data-library-index]').forEach(b=>b.onclick=()=>{const item=subset[Number(b.dataset.libraryIndex)];if(item)openItem(item)});
+  wireQuickProgress();
+ };
  search.oninput=()=>{libraryFilters.query=search.value;update()};
  if(sort)sort.onchange=()=>{libraryFilters.sort=sort.value;update()};
  else wireWatchlistSort(m,s,update);
@@ -1498,7 +1508,7 @@ function retryAfterHint(response){
  const seconds=retryAfterSeconds(response);
  return seconds===null?'Please try again later.':'Please try again in '+seconds+' second'+(seconds===1?'':'s')+'.';
 }
-async function safeReadRequest(requestOnce,{readOnly=true}={}){
+async function safeReadRequest(requestOnce,{readOnly=true,shouldRetryResponse=()=>true}={}){
  for(let attempt=0;attempt<2;attempt++){
   let response;
   try{response=await requestOnce()}
@@ -1507,7 +1517,7 @@ async function safeReadRequest(requestOnce,{readOnly=true}={}){
    await new Promise(resolve=>setTimeout(resolve,250));
    continue;
   }
-  if(!readOnly||attempt||!transientReadStatuses.has(response.status)||
+  if(!readOnly||attempt||!transientReadStatuses.has(response.status)||!shouldRetryResponse(response)||
      (typeof navigator!=='undefined'&&navigator.onLine===false))return response;
   const after=retryAfterSeconds(response);
   // Without a valid retry hint, don't immediately repeat a throttled request.
@@ -1610,18 +1620,22 @@ async function ani(query,variables={}){
 // The server fallback is only allowed for failed browser reads, never uncertain writes.
 async function readTraktResponse(r){
  if(r.ok&&r.status===204)return null;
+ const gatewayBlocked=r.headers?.get?.('x-mokumokuren-trakt-blocked')==='1';
+ const failure=message=>Object.assign(Error(message),{status:r.status,gatewayBlocked});
  const raw=await r.text();let data;
  try{data=JSON.parse(raw)}catch{
-  if(r.status===429)throw Error('Trakt rate limit reached (429). '+retryAfterHint(r));
+  if(r.status===429)throw failure('Trakt rate limit reached (429). '+retryAfterHint(r));
   const cloudflare=/cloudflare|sorry, you have been blocked|attention required/i.test(raw);
   throw Error(cloudflare?'Trakt blocked this API request (Cloudflare HTTP '+r.status+').':'Trakt returned a non-JSON response (HTTP '+r.status+').');
  }
  if(!r.ok){
-  const message=typeof data==='object'?(data.error_description||data.message||data.error):'';
-  if(r.status===401)throw Error('Trakt session expired or unauthorized (401). Reconnect Trakt.');
-  if(r.status===403)throw Error('Trakt denied this request (403): '+String(message||'access restricted'));
-  if(r.status===429)throw Error('Trakt rate limit reached (429). '+retryAfterHint(r));
-  throw Error('Trakt API HTTP '+r.status+': '+String(message||'request failed').slice(0,160));
+  const message=data&&typeof data==='object'?(data.error_description||data.message||data.error):'';
+  if(r.status===401)throw failure('Trakt session expired or unauthorized (401). Reconnect Trakt.');
+  if(r.status===403)throw failure('Trakt denied this request (403): '+String(message||'access restricted'));
+  if(r.status===429)throw failure('Trakt rate limit reached (429). '+retryAfterHint(r));
+  if(r.status===502&&(gatewayBlocked||message==='Trakt upstream blocked by Cloudflare'))
+   throw failure('Trakt blocked the connection through Cloudflare. Try refreshing in a few minutes.');
+  throw failure('Trakt API HTTP '+r.status+': '+String(message||'request failed').slice(0,160));
  }
  return data;
 }
@@ -1699,7 +1713,7 @@ async function trakt(path,options={}){
  const requestOnce=async()=>{
   assertSameAccount();
   if(readOnly&&preferProxy)return proxyRead();
-  const headers={authorization:'Bearer '+state.trakt,'trakt-api-key':TRAKT_ID,'trakt-api-version':'2',accept:'application/json',...(options.body?{'content-type':'application/json'}:{})};
+  const headers={authorization:'Bearer '+state.trakt,'trakt-api-key':TRAKT_ID,'trakt-api-version':'2',accept:'application/json','content-type':'application/json'};
   const request={method:options.method||'GET',headers,mode:'cors',cache:'no-store',...(options.body?{body:options.body}:{})};
   let browserResponse;
   try{browserResponse=await fetchWithDeadline('https://api.trakt.tv'+path,request)}
@@ -1722,7 +1736,10 @@ async function trakt(path,options={}){
  };
  const requestedAccess=state.trakt;
  let response;
- try{response=await safeReadRequest(requestOnce,{readOnly})}
+ try{response=await safeReadRequest(requestOnce,{
+  readOnly,
+  shouldRetryResponse:r=>r.status!==429&&r.headers?.get?.('x-mokumokuren-trakt-blocked')!=='1',
+ })}
  catch(error){assertSameAccount();throw error}
  assertSameAccount();
  // A definite 401 is safe to retry once after a single-flight token refresh.
@@ -1734,6 +1751,7 @@ async function trakt(path,options={}){
  }
  const result=await readTraktResponse(response);
  assertSameAccount();
+ options.onResponse?.(response);
  return result;
  }finally{finishWrite?.()}
 }
@@ -1953,28 +1971,54 @@ function normalizeTraktLibraryItem(x,kind,i=0){
   _key:ids.trakt||ids.tmdb||i,progress,listedAt:x.listed_at,watchlistRank:x.rank,
   nextEpisode:kind==='tv'&&x.episode?{season:x.episode.season,number:x.episode.number,title:x.episode.title}:x._nextEpisode||undefined,watchedCount:x._watchedCount};
 }
-// Trakt changed watched endpoints to paginated results in 2026. Read every page,
-// never silently present the first page as the entire account history.
+// A server can clamp the requested limit. Use its pagination metadata when
+// available and keep reading to an empty page when CORS hides the headers.
 async function traktPagedRead(path,{pageSize=100,maxPages=30}={}){
  const rows=[];
+ const separator=path.includes('?')?'&':'?';
+ const supportsUnpagedResponse=/^\/sync\/watched\/(?:movies|shows)(?:\?|$)/.test(path);
+ let previousPage;
+ let hasPagination=false;
  for(let page=1;page<=maxPages;page++){
-  const separator=path.includes('?')?'&':'?';
-  const result=await trakt(path+separator+'page='+page+'&limit='+pageSize);
+  let pageCount;
+  const result=await trakt(path+separator+'page='+page+'&limit='+pageSize,{
+   onResponse(response){
+    const headers=response.headers;
+    const reportedPage=Number(headers?.get?.('x-pagination-page'));
+    if(Number.isSafeInteger(reportedPage)&&reportedPage>0)hasPagination=true;
+    if(reportedPage!==page)return;
+    const count=Number(headers.get('x-pagination-page-count'));
+    if(Number.isSafeInteger(count)&&count>=page)pageCount=count;
+   },
+  });
   if(!Array.isArray(result))throw Error('Trakt returned an invalid paginated library response.');
+  if(!result.length)return rows;
+  const currentPage=JSON.stringify(result);
+  if(currentPage===previousPage){
+   // The watched endpoints can return an unpaginated snapshot.
+   if(supportsUnpagedResponse&&page===2&&!hasPagination)return rows;
+   throw Error('Trakt repeated a library page. Try refreshing your library.');
+  }
   rows.push(...result);
-  if(result.length<pageSize)return rows;
+  if(page===pageCount)return rows;
+  previousPage=currentPage;
  }
  throw Error('Your Trakt library exceeds the current safe pagination limit; no incomplete results were displayed.');
 }
 // A show only belongs to one of these categories. One endpoint response is
 // the authority for completion, not its presence in /sync/watched/shows.
 function classifyTraktShowProgress(progress){
- if(!progress||typeof progress!=='object')throw Error('Missing Trakt show progress');
- const episodes=Number(progress.completed_episodes);
- const counted=Array.isArray(progress.seasons)?progress.seasons.reduce((sum,season)=>sum+(season.episodes||[]).filter(e=>e.completed).length,0):0;
- const watched=Number.isFinite(episodes)&&episodes>=0?episodes:counted;
+ if(!progress||typeof progress!=='object'||Array.isArray(progress))throw Error('Missing Trakt show progress');
+ const episodes=progress.completed_episodes==null?NaN:Number(progress.completed_episodes);
+ const completedCount=Number.isSafeInteger(progress.completed)&&progress.completed>=0;
+ let watched=0;
+ if(completedCount)watched=progress.completed;
+ else if(Number.isSafeInteger(episodes)&&episodes>=0)watched=episodes;
+ else if(Array.isArray(progress.seasons))
+  watched=progress.seasons.reduce((sum,season)=>sum+(season.episodes||[]).filter(e=>e.completed===true).length,0);
  const aired=Number(progress.aired);
- const completed=progress.completed===true;
+ const completed=typeof progress.completed==='boolean'?progress.completed:
+  Number.isSafeInteger(aired)&&aired>0&&watched>=aired;
  return {status:completed?'Completed':watched>0?'In Progress':'Unstarted',
   watchedCount:watched, nextEpisode:progress.next_episode||null,
   progress:Number.isFinite(aired)&&aired>0?Math.round(Math.min(100,watched/ aired*100))+'%':undefined};
@@ -1998,18 +2042,48 @@ function uniqueTraktEntries(rows,kind){
   if(seen.has(key))return false;seen.add(key);return true;
  });
 }
+function trackedTraktShowRecord(record,progress){
+ const status=classifyTraktShowProgress(progress);
+ return {...record,...status,_nextEpisode:status.nextEpisode,_watchedCount:status.watchedCount};
+}
 async function trackedTraktShows(){
+ const accountRevision=traktAccountRevision;
+ let watched;
+ try{
+  watched=await traktPagedRead('/sync/progress/watched');
+ }catch(error){
+  if(![404,405,501].includes(error.status)||traktAccountRevision!==accountRevision)throw error;
+  return trackedTraktShowsIndividually(accountRevision);
+ }
+ const records=[];
+ for(const entry of watched){
+  const progress=entry?.progress;
+  if(!entry?.show?.ids?.trakt||!Number.isSafeInteger(progress?.completed)||progress.completed<0||
+     !Number.isSafeInteger(progress.aired)||progress.aired<0)continue;
+  records.push(trackedTraktShowRecord(entry,progress));
+ }
+ if(watched.length&&!records.length)throw Error('Trakt returned invalid show progress. Try again.');
+ return {records:uniqueTraktEntries(records,'tv'),failed:watched.length-records.length};
+}
+// Compatibility for Trakt deployments where bulk watched progress is unavailable.
+// Stop issuing new reads when the provider starts throttling or denying them.
+async function trackedTraktShowsIndividually(accountRevision){
  const watched=await traktPagedRead('/sync/watched/shows');
  const unique=uniqueTraktEntries(watched,'tv');
- const records=new Array(unique.length),failed=[];
- let index=0;
- async function worker(){while(index<unique.length){const i=index++,record=unique[i];const id=record.show?.ids?.trakt||record.ids?.trakt;
-  if(!id){failed.push('missing Trakt show identifier');continue}
-  try{const status=classifyTraktShowProgress(await traktShowProgress(id));records[i]={...record,...status,_nextEpisode:status.nextEpisode,_watchedCount:status.watchedCount}}catch(e){failed.push(String(id))}
- }}
+ const records=new Array(unique.length);
+ let index=0,stopError;
+ async function worker(){
+  while(index<unique.length&&!stopError&&traktAccountRevision===accountRevision){
+   const i=index++,record=unique[i],id=record.show?.ids?.trakt||record.ids?.trakt;
+   if(!id)continue;
+   try{records[i]=trackedTraktShowRecord(record,await traktShowProgress(id))}
+   catch(error){if(error.status===429||error.gatewayBlocked)stopError=error;}
+  }
+ }
  await Promise.all(Array.from({length:Math.min(4,unique.length)},worker));
- if(failed.length===unique.length&&unique.length)throw Error('Trakt show progress could not be verified. Try again.');
- return {records:records.filter(Boolean),failed:failed.length};
+ const available=records.filter(Boolean);
+ if(!available.length&&unique.length)throw stopError||Error('Trakt show progress could not be verified. Try again.');
+ return {records:available,failed:unique.length-available.length};
 }
 async function renderHomeDashboard(){
  const target=document.querySelector('#home-dashboard');if(!target)return;
@@ -2317,7 +2391,7 @@ async function callback(){
       let needsServer=false;
       try{
         stage='browser exchange';
-        r=await fetch('https://api.trakt.tv/oauth/token',{method:'POST',mode:'cors',headers:{'content-type':'application/json','accept':'application/json'},body:JSON.stringify(payload),cache:'no-store'});
+        r=await fetch('https://auth.trakt.tv/oauth/token',{method:'POST',mode:'cors',headers:{'content-type':'application/json','accept':'application/json'},body:JSON.stringify(payload),cache:'no-store'});
       }catch(browserError){needsServer=true}
       if(!needsServer){
         raw=await r.text();

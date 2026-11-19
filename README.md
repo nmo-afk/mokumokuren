@@ -33,6 +33,10 @@ Configure these privately in Netlify for production, with Functions runtime scop
 
 Register the exact `${MOKUMOKUREN_ORIGIN}/callback` in both OAuth applications. Missing or mismatched configuration fails closed. The repository contains public client IDs and empty secret placeholders only. Keep personal access tokens and secrets out of source and chat.
 
+In the Trakt application that owns `TRAKT_CLIENT_ID`, also add `MOKUMOKUREN_ORIGIN` to **JavaScript (CORS) origins**. Enter the HTTPS origin without `/callback`. That setting enables the browser's direct Trakt API requests. [Trakt CORS guide](https://developer.trakt.tv/docs/cors)
+
+If the browser falls back to Netlify and Cloudflare blocks that connection, inspect the `/api/trakt` response in the browser's Network panel. Send Trakt support the UTC timestamp, upstream status, and `cf_ray` when present. Keep authorization headers and tokens private.
+
 ## Developer verification
 
 ```sh
@@ -60,4 +64,4 @@ The worker caches public app assets only. Provider account data and edits requir
 
 ## Credits
 
-Mokumokuren is a personal, non-commercial app. Existing attribution is preserved in `ARCTIC-FUSE-LICENSE.txt` and the app settings. This product uses the TMDB API but is not endorsed or certified by TMDB. The owner's existing decision to defer additional per-icon research for this personal-use scope is unchanged.
+Mokumokuren is a personal, non-commercial app. Existing attribution is preserved in `ARCTIC-FUSE-LICENSE.txt` and the app settings. Mokumokuren uses Trakt but is not endorsed or certified by Trakt. This product uses the TMDB API but is not endorsed or certified by TMDB. The owner's existing decision to defer additional per-icon research for this personal-use scope is unchanged.

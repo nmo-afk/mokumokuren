@@ -8,7 +8,7 @@ import vm from 'node:vm';
 const source=readFileSync(new URL('../app.js',import.meta.url),'utf8');
 const snippet=source.slice(source.indexOf('function isTraktGatewayBlocked('),source.indexOf('// Make PWA updates explicit'));
 assert(snippet.startsWith('function isTraktGatewayBlocked('),'Missing OAuth gateway helper');
-const direct='https://api.trakt.tv/oauth/token';
+const direct='https://auth.trakt.tv/oauth/token';
 const server='https://mokumokuren.example/api/trakt-token';
 const response=(value,status=200,type='application/json')=>new Response(
  typeof value==='string'?value:JSON.stringify(value),{status,headers:{'content-type':type}}

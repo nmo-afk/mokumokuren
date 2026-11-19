@@ -16,7 +16,13 @@ const cases=[
 ];
 try{
   for(const [name,status,body,expected,contentType] of cases){
-    globalThis.fetch=async()=>new Response(typeof body==='string'?body:JSON.stringify(body),{status,headers:{'content-type':contentType||'application/json'}});
+    globalThis.fetch=async(url,options)=>{
+      assert.equal(url,'https://auth.trakt.tv/oauth/token');
+      assert.equal(options.method,'POST');
+      assert.equal(new Headers(options.headers).get('user-agent'),'Mokumokuren/1.0.0-rc.1');
+      assert.deepEqual(JSON.parse(options.body),{...payload,client_id:'test-client',grant_type:'authorization_code'});
+      return new Response(typeof body==='string'?body:JSON.stringify(body),{status,headers:{'content-type':contentType||'application/json'}});
+    };
     const result=await call();assert.equal(result.status,expected,name);
     assert.equal(result.headers.get('cache-control'),'no-store',name);
     await result.json();

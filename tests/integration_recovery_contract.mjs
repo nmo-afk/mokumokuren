@@ -50,7 +50,7 @@ ctx.fetch=async(url)=>{calls.push(url);if(url.startsWith('https://'))throw Error
 assert.equal((await api.trakt('/users/settings')).user.username,'fallback');assert.equal(calls.length,2);assert.equal(calls[1].startsWith('/api/trakt?'),true);done();
 calls.length=0;
 ctx.fetch=async(url)=>{calls.push(url);return calls.length===1?json({error:'rate'},429,{'retry-after':'0'}):json({user:{username:'ok'}})};
-assert.equal((await api.trakt('/users/settings')).user.username,'ok');assert.equal(calls.length,2);done();
+await assert.rejects(()=>api.trakt('/users/settings'),/rate limit/);assert.equal(calls.length,1);done();
 calls.length=0;
 ctx.fetch=async(url)=>{calls.push(url);return json({error:'rate'},429,{'retry-after':'28'})};
 await assert.rejects(()=>api.trakt('/users/settings'),/28 seconds/);assert.equal(calls.length,1);done();

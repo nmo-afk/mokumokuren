@@ -9,7 +9,10 @@ fixture=r'''() => {
  window.__test={state,layout,renderHomeDashboard,refreshRemoteTracking,setTrakt:fn=>trakt=fn};
  window.__test.setTrakt(async(path,options={})=>{
   const s=window.__server;
-  if(path.startsWith('/sync/watched/shows'))return [{show:{title:'Galaxy Rangers',ids:{trakt:33,tmdb:733}}}];
+  if(path.startsWith('/sync/progress/watched?page=1&'))return [{
+   show:{title:'Galaxy Rangers',ids:{trakt:33,tmdb:733}},
+   progress:{completed:s.episode,aired:12,next_episode:{season:1,number:s.episode+1,title:'Episode '+(s.episode+1)}},
+  }];
   if(path.startsWith('/sync/watchlist/shows'))return [];
   if(path.includes('/shows/33/progress/watched'))return {completed:false,completed_episodes:s.episode,aired:12,next_episode:{season:1,number:s.episode+1,title:'Episode '+(s.episode+1)}};
   if(path==='/sync/history'){

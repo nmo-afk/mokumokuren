@@ -67,6 +67,7 @@ const sourceConfig=await readFile(join(root,'netlify.toml'),'utf8');
 assert.match(sourceConfig,/publish\s*=\s*"dist"/);checks++;
 assert.match(sourceConfig,/command\s*=\s*"node scripts\/build-release\.mjs"/);checks++;
 assert.match(sourceConfig,/Content-Security-Policy = .*script-src 'self'/);checks++;
+assert.match(sourceConfig,/connect-src 'self' https:\/\/api\.trakt\.tv https:\/\/auth\.trakt\.tv;/);checks++;
 assert.match(sourceConfig,/X-Frame-Options = "DENY"/);checks++;
 for(const name of ['app.js','style.css','service-worker.js','index.html','manifest.webmanifest']){
  assert.match(sourceConfig,new RegExp('for = "\\/'+name.replace('.','\\.')+'"'));checks++;
